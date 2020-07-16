@@ -1,0 +1,12 @@
+{
+    "video": {
+        "video_id": "5b408bf3e43d1300d3faca3a",
+        "cover_addr": "http://p9.pstatp.com/large/8fb9000a620557d48e9f.jpeg",
+        "play_addr": {
+            "uri": "v0200ff70000bck86n4mavf9lsqsr7m0",
+            "url_list": ["https://aweme.snssdk.com/aweme/v1/play/?video_id=v0200ff70000bck86n4mavf9lsqsr7m0&line=0&ratio=720p&media_type=4&vr_type=0&test_cdn=None&improve_bitrate=0", "https://api.amemv.com/aweme/v1/play/?video_id=v0200ff70000bck86n4mavf9lsqsr7m0&line=0&ratio=720p&media_type=4&vr_type=0&test_cdn=None&improve_bitrate=0", "https://aweme.snssdk.com/aweme/v1/play/?video_id=v0200ff70000bck86n4mavf9lsqsr7m0&line=1&ratio=720p&media_type=4&vr_type=0&test_cdn=None&improve_bitrate=0", "https://api.amemv.com/aweme/v1/play/?video_id=v0200ff70000bck86n4mavf9lsqsr7m0&line=1&ratio=720p&media_type=4&vr_type=0&test_cdn=None&improve_bitrate=0"]
+        },
+        "like_count": 5,
+        "play_count": 20
+    }
+}
