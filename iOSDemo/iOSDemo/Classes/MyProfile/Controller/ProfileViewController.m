@@ -6,17 +6,20 @@
 //  Copyright © 2020 Shenmeng Yin. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "ProfileViewController.h"
 
-@interface ViewController ()
+@interface ProfileViewController ()
 
 @end
 
-@implementation ViewController
+@implementation ProfileViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view.
+    
+    
 }
 
 
