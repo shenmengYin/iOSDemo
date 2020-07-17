@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HTSUserModel : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic, copy) NSString *user_id;
+@property (nonatomic, copy) NSString *userID;
 
 @property (nonatomic, copy) NSString *avatar;
 
@@ -21,9 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *intro;
 
-@property (nonatomic, assign) NSInteger follower_count;
+@property (nonatomic, assign) NSInteger followerCount;
 
-@property (nonatomic, assign) NSInteger following_count;
+@property (nonatomic, assign) NSInteger followingCount;
 
 
 

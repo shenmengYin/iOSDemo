@@ -6,13 +6,13 @@
 //  Copyright © 2020 Shenmeng Yin. All rights reserved.
 //
 
-#import "ProfileViewController.h"
+#import "HTSProfileViewController.h"
 
-@interface ProfileViewController ()
+@interface HTSProfileViewController ()
 
 @end
 
-@implementation ProfileViewController
+@implementation HTSProfileViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

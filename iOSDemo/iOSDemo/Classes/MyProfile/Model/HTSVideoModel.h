@@ -15,21 +15,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HTSVideoModel : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic, copy) NSString *video_id;
+@property (nonatomic, copy) NSString *videoID;
 
-@property (nonatomic, strong) PlayAddress *play_addr;
+@property (nonatomic, strong) PlayAddress *playAddr;
 
-@property (nonatomic, copy) NSString *cover_addr;
+@property (nonatomic, copy) NSString *coverAddr;
 
-@property (nonatomic, assign) NSInteger like_count;
+@property (nonatomic, assign) NSInteger likeCount;
 
-@property (nonatomic, assign) NSInteger play_count;
+@property (nonatomic, assign) NSInteger playCount;
 
 @end
 
-@interface PlayAddress : NSObject
+@interface PlayAddress : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic, copy) NSArray<NSString *> *url_list;
+@property (nonatomic, copy) NSArray<NSString *> *urlList;
 
 @property (nonatomic, copy) NSString *uri;
 
