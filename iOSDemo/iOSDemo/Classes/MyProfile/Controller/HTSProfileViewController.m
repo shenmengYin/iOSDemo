@@ -51,17 +51,18 @@
 -(void)initCollectionView{
     _itemWidth = (SCREEN_WIDTH - (CGFloat)(((NSInteger)(SCREEN_WIDTH)) % 3) ) / 3.0f - 1.0f;
     _itemHeight = _itemWidth * 1.35f;
-    _videos = [[NSMutableArray alloc] init];
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     layout.headerReferenceSize = CGSizeMake(100, 40);
+    
+    _collectionView = [[UICollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:layout];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
-    _collectionView = [[UICollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:layout];
     _collectionView.backgroundColor = [UIColor grayColor];
     _collectionView.showsVerticalScrollIndicator = NO;
     [_collectionView registerClass:[HTSVideoCollectionViewCell class] forCellWithReuseIdentifier:CELL_IDENTIFIER];
     [self.view addSubview:_collectionView];
+    NSLog(@"initCollectionView");
     
 }
 
@@ -69,10 +70,12 @@
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    NSLog(@"numOfItemsInSection");
     return CELL_COUNT;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    NSLog(@"numOfSections");
     return 2;
 }
 
@@ -81,12 +84,13 @@
     (HTSVideoCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:CELL_IDENTIFIER
                                                                               forIndexPath:indexPath];
     HTSVideoModel * video = [_videos objectAtIndex:0];
-    NSLog(@"lowerCaseString is: %@", [(NSString *)video lowercaseString]);
+    NSLog(@"pathAtIndex");
     [cell initWithVideo:video];
     return cell;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"sizeForItemAtindexpath");
     return  CGSizeMake(_itemWidth, _itemHeight);
 }
 
