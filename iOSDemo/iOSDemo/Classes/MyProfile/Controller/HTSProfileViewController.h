@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ProfileViewController : UIViewController
+@interface HTSProfileViewController : UIViewController
 
+@property (nonatomic, strong) UICollectionView *collectionView;
 
 @end
 

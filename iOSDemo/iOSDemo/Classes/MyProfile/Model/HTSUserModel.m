@@ -10,4 +10,15 @@
 
 @implementation HTSUserModel
 
++ (NSDictionary *)JSONKeyPathsByPropertyKey{
+    return @{
+        @"userID": @"user_id",
+        @"avatar": @"avatar",
+        @"name": @"name",
+        @"intro": @"intro",
+        @"followingCount": @"following_count",
+        @"followerCount": @"follower_count"
+    };
+}
+
 @end
