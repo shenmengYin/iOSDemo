@@ -11,6 +11,7 @@ target 'iOSDemo' do
   pod 'Mantle'
   pod 'Masonry‘
   pod 'SDWebImage', '~> 5.0'
+  pod 'ReactiveCocoa', '~> 2.5'
   
 
   target 'iOSDemoTests' do

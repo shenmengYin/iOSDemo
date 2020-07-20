@@ -9,6 +9,13 @@
 #import "HTSVideoCollectionViewCell.h"
 #import "HTSVideoModel.h"
 #import <Masonry/Masonry.h>
+#import "HTSVideoCellViewModel.h"
+
+@interface HTSVideoCollectionViewCell ()
+
+@property (nonatomic) HTSVideoCellViewModel *viewModel;
+
+@end
 
 @implementation HTSVideoCollectionViewCell
 
@@ -17,13 +24,12 @@
     if(self){
         self.clipsToBounds = YES;
         _imageView = [[UIImageView alloc] init];
-        _imageView.backgroundColor = [UIColor yellowColor];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
         [self.contentView addSubview:_imageView];
         
         _likeButton = [[UIButton alloc] init];
         [_likeButton setTitle:@"0" forState:UIControlStateNormal];
-        [_likeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_likeButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         [_likeButton setImage:[UIImage imageNamed:@"iconProfileLike"] forState:UIControlStateNormal];
         [self.contentView addSubview:_likeButton];
         
@@ -39,9 +45,16 @@
     return self;
 }
 
--(void)initWithVideo:(HTSVideoModel *)video{
-    [self.imageView setImage:[UIImage imageNamed:@"cover"]];
-    [self.likeButton setTitle:[NSString stringWithFormat: @"%ld", video.likeCount] forState:UIControlStateNormal];
+//-(void)initWithVideo:(HTSVideoModel *)video{
+//    [self.imageView setImage:[UIImage imageNamed:@"cover"]];
+//    [self.likeButton setTitle:[NSString stringWithFormat: @"%ld", video.likeCount] forState:UIControlStateNormal];
+//}
+
+- (void)bindWithViewModel:(HTSVideoCellViewModel *)viewModel
+{
+    RAC(_imageView, image) = [viewModel.coverImageSignal takeUntil:self.rac_prepareForReuseSignal];
+    RAC(_likeButton.titleLabel, text) = [viewModel.displaySignal takeUntil:self.rac_prepareForReuseSignal];
+    _viewModel = viewModel;
 }
 
 @end
