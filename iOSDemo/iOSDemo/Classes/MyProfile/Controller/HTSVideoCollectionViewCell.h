@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
-@class HTSVideoModel;
+@class HTSVideoCellViewModel;
 
 @interface HTSVideoCollectionViewCell : UICollectionViewCell
 
@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) UIButton *likeButton;
 
--(void)initWithVideo: (HTSVideoModel *) video;
+- (void)bindWithViewModel:(HTSVideoCellViewModel *)viewModel;
 
 @end
 
