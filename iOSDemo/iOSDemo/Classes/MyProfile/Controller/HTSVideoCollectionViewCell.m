@@ -17,6 +17,18 @@
 
 @end
 
+@implementation UIButton (RACTitleSupport)
+@dynamic racExt_Title;
+- (void)setRacExt_Title:(NSString *)racExt_Title
+{
+  [self setTitle:racExt_Title forState:UIControlStateNormal];
+}
+- (NSString *)racExt_Title
+{
+  return [self titleForState:UIControlStateNormal];
+}
+@end
+
 @implementation HTSVideoCollectionViewCell
 
 -(instancetype)initWithFrame:(CGRect)frame{
@@ -28,8 +40,8 @@
         [self.contentView addSubview:_imageView];
         
         _likeButton = [[UIButton alloc] init];
-        [_likeButton setTitle:@"0" forState:UIControlStateNormal];
-        [_likeButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        //[_likeButton setTitle:@"0" forState:UIControlStateNormal];
+        [_likeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_likeButton setImage:[UIImage imageNamed:@"iconProfileLike"] forState:UIControlStateNormal];
         [self.contentView addSubview:_likeButton];
         
@@ -37,10 +49,9 @@
             make.edges.equalTo(self.contentView);
         }];
         [_likeButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.contentView).offset(10);
+            //make.left.equalTo(self.contentView).offset(10);
             make.bottom.right.equalTo(self.contentView).inset(10);
         }];
-        
     }
     return self;
 }
@@ -53,7 +64,7 @@
 - (void)bindWithViewModel:(HTSVideoCellViewModel *)viewModel
 {
     RAC(_imageView, image) = [viewModel.coverImageSignal takeUntil:self.rac_prepareForReuseSignal];
-    RAC(_likeButton.titleLabel, text) = [viewModel.displaySignal takeUntil:self.rac_prepareForReuseSignal];
+    RAC(self, likeButton.racExt_Title) = [viewModel.displaySignal takeUntil:self.rac_prepareForReuseSignal];
     _viewModel = viewModel;
 }
 

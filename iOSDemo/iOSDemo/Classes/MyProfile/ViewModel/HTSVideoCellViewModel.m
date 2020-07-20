@@ -46,9 +46,11 @@
 
     self.displaySignal = [videoSignal map:^id (HTSVideoModel *video) {
         if(video.likeCount < 10){
+         
             return [NSString stringWithFormat:@"%ld", (long) video.playCount];
         }
         else{
+ 
             return [NSString stringWithFormat:@"%ld", (long) video.likeCount];
         }
     }];
