@@ -11,6 +11,10 @@
 NS_ASSUME_NONNULL_BEGIN
 @class HTSVideoCellViewModel;
 
+@interface UIButton (RACTitleSupport)
+@property (strong, nonatomic) NSString *racExt_Title;
+@end
+
 @interface HTSVideoCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic, strong) UIImageView *imageView;
