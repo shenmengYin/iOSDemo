@@ -10,9 +10,14 @@
 #import "HTSProfileViewController.h"
 #import "HTSProfileViewModel.h"
 #import "HTSVideoCellViewModel.h"
+#import "HTSProfileHeader.h"
 
 #define CELL_IDENTIFIER @"HTSVideoCollectionViewCell"
+#define HEADER_IDENTIFIER @"HTSProfileHeader"
+#define SAFE_AREA_TOP_HEIGHT ((SCREEN_HEIGHT >= 812.0) && [[UIDevice currentDevice].model isEqualToString:@"iPhone"] ? 88 : 64)
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
+#define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
+
 
 @interface HTSProfileViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
@@ -66,6 +71,9 @@
     _collectionView.backgroundColor = [UIColor clearColor];
     _collectionView.showsVerticalScrollIndicator = NO;
     [_collectionView registerClass:[HTSVideoCollectionViewCell class] forCellWithReuseIdentifier:CELL_IDENTIFIER];
+    [_collectionView registerClass:[HTSProfileHeader class]
+           forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                  withReuseIdentifier:HEADER_IDENTIFIER];
     [self rac_liftSelector:@selector(refreshTableView:) withSignals:_viewModel.dataSignal, nil];
     [_viewModel.loadDataCommand execute:nil];
     [self.view addSubview:_collectionView];
@@ -105,6 +113,24 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"sizeForItemAtindexpath");
     return  CGSizeMake(_itemWidth, _itemHeight);
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+  UICollectionReusableView *reusableView = nil;
+
+  if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+    reusableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind
+                                                      withReuseIdentifier:HEADER_IDENTIFIER
+                                                             forIndexPath:indexPath];
+  }
+  return reusableView;
+}
+
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    if(section == 0) {
+        return CGSizeMake(SCREEN_WIDTH, 200 + SAFE_AREA_TOP_HEIGHT);
+    }
+    return CGSizeZero;
 }
 
 @end

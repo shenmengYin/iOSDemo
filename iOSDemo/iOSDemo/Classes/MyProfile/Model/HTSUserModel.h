@@ -25,6 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) NSInteger followingCount;
 
+@property (nonatomic, assign) NSInteger flameCount;
+
 
 
 @end

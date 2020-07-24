@@ -27,6 +27,7 @@
 		B780D8F524C273E30003FE5B /* HTSProfileCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B780D8F424C273E30003FE5B /* HTSProfileCollectionViewLayout.m */; };
 		B7AE05DA24C41E1300C8F037 /* HTSProfileViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05D924C41E1300C8F037 /* HTSProfileViewModel.m */; };
 		B7AE05DE24C4C9D900C8F037 /* HTSVideoCellViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05DD24C4C9D900C8F037 /* HTSVideoCellViewModel.m */; };
+		B7AE05E124C93C9200C8F037 /* HTSProfileHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05E024C93C9200C8F037 /* HTSProfileHeader.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,8 @@
 		B7AE05D924C41E1300C8F037 /* HTSProfileViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSProfileViewModel.m; sourceTree = "<group>"; };
 		B7AE05DC24C4C9D900C8F037 /* HTSVideoCellViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSVideoCellViewModel.h; sourceTree = "<group>"; };
 		B7AE05DD24C4C9D900C8F037 /* HTSVideoCellViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSVideoCellViewModel.m; sourceTree = "<group>"; };
+		B7AE05DF24C93C9200C8F037 /* HTSProfileHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSProfileHeader.h; sourceTree = "<group>"; };
+		B7AE05E024C93C9200C8F037 /* HTSProfileHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSProfileHeader.m; sourceTree = "<group>"; };
 		CE5E885C85E3FFC964001429 /* Pods-iOSDemo-iOSDemoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSDemo-iOSDemoUITests.debug.xcconfig"; path = "Target Support Files/Pods-iOSDemo-iOSDemoUITests/Pods-iOSDemo-iOSDemoUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		D7422B70559D25EE18FA52F9 /* Pods-iOSDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSDemo.debug.xcconfig"; path = "Target Support Files/Pods-iOSDemo/Pods-iOSDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		E4646F3DADB28A66857423F1 /* Pods-iOSDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSDemoTests.debug.xcconfig"; path = "Target Support Files/Pods-iOSDemoTests/Pods-iOSDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -260,6 +263,8 @@
 				B780D8F124C15B550003FE5B /* HTSVideoCollectionViewCell.m */,
 				B780D8F324C273E30003FE5B /* HTSProfileCollectionViewLayout.h */,
 				B780D8F424C273E30003FE5B /* HTSProfileCollectionViewLayout.m */,
+				B7AE05DF24C93C9200C8F037 /* HTSProfileHeader.h */,
+				B7AE05E024C93C9200C8F037 /* HTSProfileHeader.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -583,6 +588,7 @@
 			files = (
 				B780D8F524C273E30003FE5B /* HTSProfileCollectionViewLayout.m in Sources */,
 				B780D8A824BFF99D0003FE5B /* HTSProfileViewController.m in Sources */,
+				B7AE05E124C93C9200C8F037 /* HTSProfileHeader.m in Sources */,
 				B780D8F224C15B550003FE5B /* HTSVideoCollectionViewCell.m in Sources */,
 				B780D8EB24C021FF0003FE5B /* HTSVideoModel.m in Sources */,
 				B7AE05DA24C41E1300C8F037 /* HTSProfileViewModel.m in Sources */,
