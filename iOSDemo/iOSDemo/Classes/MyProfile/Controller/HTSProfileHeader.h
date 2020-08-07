@@ -8,12 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
+static const NSInteger HTSProfileHeaderEditTag = 0x01;
+
 NS_ASSUME_NONNULL_BEGIN
+
+@protocol HTSProfileHeaderDelegate
+
+- (void)onUserActionTap:(NSInteger)tag;
+
+@end
 
 @class HTSUserModel;
 
 @interface HTSProfileHeader : UICollectionReusableView
 
+@property (nonatomic, weak) id <HTSProfileHeaderDelegate>    delegate;
 @property (nonatomic, strong) UIImageView                  *avatar;
 @property (nonatomic, strong) UIButton                     *editButton;
 @property (nonatomic, strong) UILabel                      *userName;

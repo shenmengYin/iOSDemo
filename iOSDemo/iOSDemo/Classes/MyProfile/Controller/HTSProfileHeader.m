@@ -9,6 +9,7 @@
 #import "HTSProfileHeader.h"
 #import "HTSUserModel.h"
 #import <Masonry/Masonry.h>
+#import "HTSEditViewController.h"
 
 #define SafeAreaTopHeight (([UIScreen mainScreen].bounds.size.height >= 812.0) && [[UIDevice currentDevice].model isEqualToString:@"iPhone"] ? 88 : 64)
 
@@ -62,11 +63,13 @@
     _editButton.layer.borderColor = [UIColor redColor].CGColor;
     _editButton.layer.borderWidth = 1;
     _editButton.layer.cornerRadius = 16.5;
+    _editButton.tag = HTSProfileHeaderEditTag;
     [_editButton addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTapAction:)]];
     [_container addSubview:_editButton];
     [_editButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.avatar.mas_right).offset(29);
         make.bottom.equalTo(self.avatar.mas_bottom).offset(8);
+        make.right.equalTo(self.mas_right).offset(-30);
         make.height.mas_equalTo(33);
         make.width.mas_equalTo(215);
     }];
@@ -162,6 +165,7 @@
     [_flame mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.avatar);
         make.left.equalTo(self.avatar.mas_right).offset(50);
+        //make.right.equalTo(self.followerNum.mas_left).offset(-10);
     }];
     
     _flameTitle = [[UILabel alloc] init];
@@ -182,6 +186,7 @@
     [_followerNum mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.flame);
         make.left.equalTo(self.flame.mas_right).offset(30);
+        //make.right.equalTo(self.followedNum.mas_left).offset(-10);
     }];
     
     _followerNumTitle = [[UILabel alloc] init];
@@ -202,6 +207,7 @@
     [_followedNum mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.flame);
         make.left.equalTo(self.followerNum.mas_right).offset(30);
+        //make.right.equalTo(self.mas_right).offset(-30);
     }];
     
     _followedNumTitle = [[UILabel alloc] init];
@@ -212,6 +218,7 @@
     [_followedNumTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.followedNum.mas_bottom).offset(5);
         make.left.equalTo(self.followedNum.mas_left);
+        make.right.equalTo(self.followedNum.mas_right);
     }];
     
 }
@@ -228,5 +235,12 @@
     [_followedNum setText:[NSString stringWithFormat:@"%ld",(long)user.followerCount]];
 }
 
+
+//Profile header delegate
+- (void)onTapAction:(UITapGestureRecognizer *)sender {
+    if(self.delegate) {
+        [self.delegate onUserActionTap:sender.view.tag];
+    }
+}
 
 @end

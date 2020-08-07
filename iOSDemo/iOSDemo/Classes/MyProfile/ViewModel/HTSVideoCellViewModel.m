@@ -8,6 +8,8 @@
 
 #import "HTSVideoCellViewModel.h"
 #import "HTSVideoModel.h"
+#import <SDWebImage/SDWebImage.h>
+#import <SDWebImageDownloader.h>
 
 @interface HTSVideoCellViewModel ()
 
@@ -22,6 +24,7 @@
         self.cellName = @"HTSVideoCollectionViewCell";
         _video = video;
         [self bindSignals];
+
     }
     return self;
 }
@@ -31,8 +34,7 @@
     RACSignal *videoSignal = [RACSignal return :self.video];
 
     self.coverImageSignal = [[[videoSignal map:^id (HTSVideoModel *video) {
-        NSData *data = [NSData dataWithContentsOfURL: [NSURL URLWithString:video.coverAddr]];
-        return [UIImage imageWithData:data];
+        return video.coverAddr;
     }] subscribeOn:[RACScheduler schedulerWithPriority:RACSchedulerPriorityBackground]]
     deliverOnMainThread];
 
@@ -56,5 +58,6 @@
     }];
 
 }
+
 
 @end

@@ -11,6 +11,8 @@
 #import "HTSProfileViewModel.h"
 #import "HTSVideoCellViewModel.h"
 #import "HTSProfileHeader.h"
+#import "UIImageView+WebCache.h"
+#import "HTSEditViewController.h"
 
 #define CELL_IDENTIFIER @"HTSVideoCollectionViewCell"
 #define HEADER_IDENTIFIER @"HTSProfileHeader"
@@ -19,9 +21,10 @@
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 
 
-@interface HTSProfileViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@interface HTSProfileViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HTSProfileHeaderDelegate>
 
 @property (nonatomic) HTSProfileViewModel *viewModel;
+@property (nonatomic) HTSProfileHeader *profileHeader;
 @property (nonatomic) NSArray *cellViewModelArray;
 @property (nonatomic, strong) NSMutableArray *videos;
 @property (nonatomic, assign) CGFloat itemWidth;
@@ -83,7 +86,11 @@
 - (void)refreshTableView:(NSArray *)cellViewModelArray
 {
     self.cellViewModelArray = cellViewModelArray;
-    [self.collectionView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __weak HTSProfileViewController *weakSelf = self;
+        [weakSelf.collectionView reloadData];
+    });
+    
     [self.collectionView.refreshControl endRefreshing];
 }
 
@@ -105,8 +112,13 @@
     (HTSVideoCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:CELL_IDENTIFIER
                                                                               forIndexPath:indexPath];
     HTSVideoCellViewModel *cellViewModel = self.cellViewModelArray[indexPath.row];
-    
     [cell bindWithViewModel:cellViewModel];
+    [cell.coverImageView sd_setImageWithURL:[NSURL URLWithString:cell.imageURL] placeholderImage:[UIImage imageNamed:@"cover"] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+            if (image) {
+                [cell.coverImageView setImage:image];
+            }
+    }];
+    
     return cell;
 }
 
@@ -116,12 +128,14 @@
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-  UICollectionReusableView *reusableView = nil;
+  HTSProfileHeader *reusableView = nil;
 
   if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-    reusableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind
+      reusableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind
                                                       withReuseIdentifier:HEADER_IDENTIFIER
                                                              forIndexPath:indexPath];
+      _profileHeader = reusableView;
+      reusableView.delegate = self;
   }
   return reusableView;
 }
@@ -132,5 +146,24 @@
     }
     return CGSizeZero;
 }
+
+-(void)onUserActionTap:(NSInteger)tag {
+    switch (tag) {
+        case HTSProfileHeaderEditTag:{
+            if(self.navigationController){
+                HTSEditViewController* editViewController = [[HTSEditViewController alloc] init];
+                [self.navigationController pushViewController:editViewController animated:YES];
+            }
+            else{
+                NSLog(@"Nav is null");
+            }
+            NSLog(@"tapped");
+            break;
+        }
+        default:
+            break;
+    }
+}
+
 
 @end
