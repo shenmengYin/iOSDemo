@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "HTSProfileViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    _window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[HTSProfileViewController new]];
+    [_window makeKeyAndVisible];
     return YES;
 }
 

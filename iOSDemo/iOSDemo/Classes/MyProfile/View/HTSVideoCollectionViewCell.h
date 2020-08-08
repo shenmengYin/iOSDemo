@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HTSVideoCellViewModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @class HTSVideoCellViewModel;
@@ -17,7 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HTSVideoCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, assign) NSString *imageURL;
+
+@property (nonatomic, strong) UIImageView *coverImageView;
 
 @property (nonatomic, strong) UIButton *likeButton;
 

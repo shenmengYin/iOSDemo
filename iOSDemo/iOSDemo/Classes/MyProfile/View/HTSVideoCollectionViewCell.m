@@ -10,6 +10,7 @@
 #import "HTSVideoModel.h"
 #import <Masonry/Masonry.h>
 #import "HTSVideoCellViewModel.h"
+#import <SDWebImage/SDWebImage.h>
 
 @interface HTSVideoCollectionViewCell ()
 
@@ -35,9 +36,9 @@
     self = [super initWithFrame:frame];
     if(self){
         self.clipsToBounds = YES;
-        _imageView = [[UIImageView alloc] init];
-        _imageView.contentMode = UIViewContentModeScaleAspectFill;
-        [self.contentView addSubview:_imageView];
+        _coverImageView = [[UIImageView alloc] init];
+        _coverImageView.contentMode = UIViewContentModeScaleAspectFill;
+        [self.contentView addSubview:_coverImageView];
         
         _likeButton = [[UIButton alloc] init];
         //[_likeButton setTitle:@"0" forState:UIControlStateNormal];
@@ -45,7 +46,7 @@
         [_likeButton setImage:[UIImage imageNamed:@"iconProfileLike"] forState:UIControlStateNormal];
         [self.contentView addSubview:_likeButton];
         
-        [_imageView mas_makeConstraints:^(MASConstraintMaker *make){
+        [_coverImageView mas_makeConstraints:^(MASConstraintMaker *make){
             make.edges.equalTo(self.contentView);
         }];
         [_likeButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -63,9 +64,11 @@
 
 - (void)bindWithViewModel:(HTSVideoCellViewModel *)viewModel
 {
-    RAC(_imageView, image) = [viewModel.coverImageSignal takeUntil:self.rac_prepareForReuseSignal];
+    
+    RAC(self, imageURL) = [viewModel.coverImageSignal takeUntil:self.rac_prepareForReuseSignal];
     RAC(self, likeButton.racExt_Title) = [viewModel.displaySignal takeUntil:self.rac_prepareForReuseSignal];
-    _viewModel = viewModel;
+ 
+   
 }
 
 @end

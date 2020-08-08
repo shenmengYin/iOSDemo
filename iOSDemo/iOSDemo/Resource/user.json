@@ -6,7 +6,8 @@
         "name": "DummyUser",
         "intro": "This is a dummy user",
         "follower_count": 3,
-        "following_count": 30
+        "following_count": 30,
+        "flame_count": 10
     }
     ]
 }

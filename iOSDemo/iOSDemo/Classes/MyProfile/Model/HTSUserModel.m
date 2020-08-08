@@ -17,7 +17,8 @@
         @"name": @"name",
         @"intro": @"intro",
         @"followingCount": @"following_count",
-        @"followerCount": @"follower_count"
+        @"followerCount": @"follower_count",
+        @"flameCount": @"follower_count"
     };
 }
 

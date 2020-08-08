@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface HTSVideoCellViewModel : NSObject
 
 @property (nonatomic) NSString *cellName;
-@property (nonatomic) RACSignal *coverImageSignal; //UIImage
+@property (nonatomic) RACSignal *coverImageSignal; //NSString
 @property (nonatomic) RACSignal *likeCountSignal; //NSNumber
 @property (nonatomic) RACSignal *playCountSignal; //NSNumber
 @property (nonatomic) RACSignal *displaySignal; //NSNumber
