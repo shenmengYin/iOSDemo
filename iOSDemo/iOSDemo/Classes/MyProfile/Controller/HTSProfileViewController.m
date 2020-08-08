@@ -150,14 +150,10 @@
 -(void)onUserActionTap:(NSInteger)tag {
     switch (tag) {
         case HTSProfileHeaderEditTag:{
-            if(self.navigationController){
-                HTSEditViewController* editViewController = [[HTSEditViewController alloc] init];
-                [self.navigationController pushViewController:editViewController animated:YES];
-            }
-            else{
-                NSLog(@"Nav is null");
-            }
-            NSLog(@"tapped");
+            HTSEditViewController* editViewController = [[HTSEditViewController alloc] init];
+            editViewController.modalPresentationStyle = UIModalPresentationFullScreen;
+            [self presentViewController:editViewController animated:YES completion:nil];
+            NSLog(@"Edit button tapped");
             break;
         }
         default:

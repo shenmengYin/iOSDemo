@@ -29,6 +29,11 @@
 		B7AE05DE24C4C9D900C8F037 /* HTSVideoCellViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05DD24C4C9D900C8F037 /* HTSVideoCellViewModel.m */; };
 		B7AE05E124C93C9200C8F037 /* HTSProfileHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05E024C93C9200C8F037 /* HTSProfileHeader.m */; };
 		B7AE05E424DD344D00C8F037 /* HTSEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05E324DD344D00C8F037 /* HTSEditViewController.m */; };
+		B7AE05ED24DEA0B400C8F037 /* HTSEditNameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05EC24DEA0B400C8F037 /* HTSEditNameCell.m */; };
+		B7AE05F024DEA0CB00C8F037 /* HTSEditIdCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05EF24DEA0CB00C8F037 /* HTSEditIdCell.m */; };
+		B7AE05F324DEA10300C8F037 /* HTSEditSelectInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05F224DEA10300C8F037 /* HTSEditSelectInfoCell.m */; };
+		B7AE05F624DEA12600C8F037 /* HTSEditAvatarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05F524DEA12600C8F037 /* HTSEditAvatarCell.m */; };
+		B7AE05F924DEA13600C8F037 /* HTSEditIntroCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05F824DEA13600C8F037 /* HTSEditIntroCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +94,16 @@
 		B7AE05E024C93C9200C8F037 /* HTSProfileHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSProfileHeader.m; sourceTree = "<group>"; };
 		B7AE05E224DD344D00C8F037 /* HTSEditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSEditViewController.h; sourceTree = "<group>"; };
 		B7AE05E324DD344D00C8F037 /* HTSEditViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSEditViewController.m; sourceTree = "<group>"; };
+		B7AE05EB24DEA0B400C8F037 /* HTSEditNameCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSEditNameCell.h; sourceTree = "<group>"; };
+		B7AE05EC24DEA0B400C8F037 /* HTSEditNameCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSEditNameCell.m; sourceTree = "<group>"; };
+		B7AE05EE24DEA0CB00C8F037 /* HTSEditIdCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSEditIdCell.h; sourceTree = "<group>"; };
+		B7AE05EF24DEA0CB00C8F037 /* HTSEditIdCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSEditIdCell.m; sourceTree = "<group>"; };
+		B7AE05F124DEA10300C8F037 /* HTSEditSelectInfoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSEditSelectInfoCell.h; sourceTree = "<group>"; };
+		B7AE05F224DEA10300C8F037 /* HTSEditSelectInfoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSEditSelectInfoCell.m; sourceTree = "<group>"; };
+		B7AE05F424DEA12600C8F037 /* HTSEditAvatarCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSEditAvatarCell.h; sourceTree = "<group>"; };
+		B7AE05F524DEA12600C8F037 /* HTSEditAvatarCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSEditAvatarCell.m; sourceTree = "<group>"; };
+		B7AE05F724DEA13600C8F037 /* HTSEditIntroCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSEditIntroCell.h; sourceTree = "<group>"; };
+		B7AE05F824DEA13600C8F037 /* HTSEditIntroCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSEditIntroCell.m; sourceTree = "<group>"; };
 		CE5E885C85E3FFC964001429 /* Pods-iOSDemo-iOSDemoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSDemo-iOSDemoUITests.debug.xcconfig"; path = "Target Support Files/Pods-iOSDemo-iOSDemoUITests/Pods-iOSDemo-iOSDemoUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		D7422B70559D25EE18FA52F9 /* Pods-iOSDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSDemo.debug.xcconfig"; path = "Target Support Files/Pods-iOSDemo/Pods-iOSDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		E4646F3DADB28A66857423F1 /* Pods-iOSDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSDemoTests.debug.xcconfig"; path = "Target Support Files/Pods-iOSDemoTests/Pods-iOSDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -250,12 +265,6 @@
 			children = (
 				B780D8A624BFF99D0003FE5B /* HTSProfileViewController.h */,
 				B780D8A724BFF99D0003FE5B /* HTSProfileViewController.m */,
-				B780D8F024C15B550003FE5B /* HTSVideoCollectionViewCell.h */,
-				B780D8F124C15B550003FE5B /* HTSVideoCollectionViewCell.m */,
-				B780D8F324C273E30003FE5B /* HTSProfileCollectionViewLayout.h */,
-				B780D8F424C273E30003FE5B /* HTSProfileCollectionViewLayout.m */,
-				B7AE05DF24C93C9200C8F037 /* HTSProfileHeader.h */,
-				B7AE05E024C93C9200C8F037 /* HTSProfileHeader.m */,
 				B7AE05E224DD344D00C8F037 /* HTSEditViewController.h */,
 				B7AE05E324DD344D00C8F037 /* HTSEditViewController.m */,
 			);
@@ -276,6 +285,22 @@
 		B780D8E024C002A40003FE5B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B780D8F024C15B550003FE5B /* HTSVideoCollectionViewCell.h */,
+				B780D8F124C15B550003FE5B /* HTSVideoCollectionViewCell.m */,
+				B780D8F324C273E30003FE5B /* HTSProfileCollectionViewLayout.h */,
+				B780D8F424C273E30003FE5B /* HTSProfileCollectionViewLayout.m */,
+				B7AE05DF24C93C9200C8F037 /* HTSProfileHeader.h */,
+				B7AE05E024C93C9200C8F037 /* HTSProfileHeader.m */,
+				B7AE05EB24DEA0B400C8F037 /* HTSEditNameCell.h */,
+				B7AE05EC24DEA0B400C8F037 /* HTSEditNameCell.m */,
+				B7AE05EE24DEA0CB00C8F037 /* HTSEditIdCell.h */,
+				B7AE05EF24DEA0CB00C8F037 /* HTSEditIdCell.m */,
+				B7AE05F124DEA10300C8F037 /* HTSEditSelectInfoCell.h */,
+				B7AE05F224DEA10300C8F037 /* HTSEditSelectInfoCell.m */,
+				B7AE05F424DEA12600C8F037 /* HTSEditAvatarCell.h */,
+				B7AE05F524DEA12600C8F037 /* HTSEditAvatarCell.m */,
+				B7AE05F724DEA13600C8F037 /* HTSEditIntroCell.h */,
+				B7AE05F824DEA13600C8F037 /* HTSEditIntroCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -551,8 +576,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7AE05F324DEA10300C8F037 /* HTSEditSelectInfoCell.m in Sources */,
 				B780D8F524C273E30003FE5B /* HTSProfileCollectionViewLayout.m in Sources */,
+				B7AE05F624DEA12600C8F037 /* HTSEditAvatarCell.m in Sources */,
 				B780D8A824BFF99D0003FE5B /* HTSProfileViewController.m in Sources */,
+				B7AE05F024DEA0CB00C8F037 /* HTSEditIdCell.m in Sources */,
 				B7AE05E124C93C9200C8F037 /* HTSProfileHeader.m in Sources */,
 				B780D8F224C15B550003FE5B /* HTSVideoCollectionViewCell.m in Sources */,
 				B780D8EB24C021FF0003FE5B /* HTSVideoModel.m in Sources */,
@@ -562,7 +590,9 @@
 				B780D8B324BFF9A00003FE5B /* main.m in Sources */,
 				B7AE05DE24C4C9D900C8F037 /* HTSVideoCellViewModel.m in Sources */,
 				B7AE05E424DD344D00C8F037 /* HTSEditViewController.m in Sources */,
+				B7AE05ED24DEA0B400C8F037 /* HTSEditNameCell.m in Sources */,
 				B780D8A524BFF99D0003FE5B /* SceneDelegate.m in Sources */,
+				B7AE05F924DEA13600C8F037 /* HTSEditIntroCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
