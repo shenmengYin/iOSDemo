@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HTSProfileViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow * window;
+@property (strong, nonatomic) HTSProfileViewController *viewController;
+@property (strong, nonatomic) UINavigationController *navController;
 
 @end
 

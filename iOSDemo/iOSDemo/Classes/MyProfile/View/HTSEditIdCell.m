@@ -19,7 +19,6 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         self.backgroundColor = [UIColor whiteColor];
 
         if (!_titleLabel) {
@@ -44,8 +43,7 @@
 }
 
 - (void)setTitleStr:(NSString *)title valueStr:(NSString *)value{
-    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    self.selectionStyle = UITableViewCellSelectionStyleDefault;
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
 
     _titleLabel.text = title;
     _valueLabel.text = value;

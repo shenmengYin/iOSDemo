@@ -10,6 +10,7 @@
 		232967A63E48287C0440C133 /* Pods_iOSDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51930674D2616F40E7837F49 /* Pods_iOSDemoTests.framework */; };
 		5F210DDC1C28365C423BE47B /* Pods_iOSDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54D2ED963368C828A3DBBB0A /* Pods_iOSDemo.framework */; };
 		74E1204ED4BDE665733AF99F /* Pods_iOSDemo_iOSDemoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE08F117BAFC941B61E5A6F2 /* Pods_iOSDemo_iOSDemoUITests.framework */; };
+		B76753FF24E14E44001A93C0 /* HTSSelectImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B76753FE24E14E44001A93C0 /* HTSSelectImageManager.m */; };
 		B780D8A224BFF99D0003FE5B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B780D8A124BFF99D0003FE5B /* AppDelegate.m */; };
 		B780D8A524BFF99D0003FE5B /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B780D8A424BFF99D0003FE5B /* SceneDelegate.m */; };
 		B780D8A824BFF99D0003FE5B /* HTSProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B780D8A724BFF99D0003FE5B /* HTSProfileViewController.m */; };
@@ -58,6 +59,8 @@
 		51930674D2616F40E7837F49 /* Pods_iOSDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOSDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		54D2ED963368C828A3DBBB0A /* Pods_iOSDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOSDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D05C9B458CC5D61AE001F91 /* Pods-iOSDemo-iOSDemoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSDemo-iOSDemoUITests.release.xcconfig"; path = "Target Support Files/Pods-iOSDemo-iOSDemoUITests/Pods-iOSDemo-iOSDemoUITests.release.xcconfig"; sourceTree = "<group>"; };
+		B76753FD24E14E43001A93C0 /* HTSSelectImageManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSSelectImageManager.h; sourceTree = "<group>"; };
+		B76753FE24E14E44001A93C0 /* HTSSelectImageManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSSelectImageManager.m; sourceTree = "<group>"; };
 		B780D89D24BFF99D0003FE5B /* iOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B780D8A024BFF99D0003FE5B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B780D8A124BFF99D0003FE5B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -278,6 +281,8 @@
 				B780D8E724C021EE0003FE5B /* HTSUserModel.m */,
 				B780D8E924C021FF0003FE5B /* HTSVideoModel.h */,
 				B780D8EA24C021FF0003FE5B /* HTSVideoModel.m */,
+				B76753FD24E14E43001A93C0 /* HTSSelectImageManager.h */,
+				B76753FE24E14E44001A93C0 /* HTSSelectImageManager.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -589,6 +594,7 @@
 				B780D8A224BFF99D0003FE5B /* AppDelegate.m in Sources */,
 				B780D8B324BFF9A00003FE5B /* main.m in Sources */,
 				B7AE05DE24C4C9D900C8F037 /* HTSVideoCellViewModel.m in Sources */,
+				B76753FF24E14E44001A93C0 /* HTSSelectImageManager.m in Sources */,
 				B7AE05E424DD344D00C8F037 /* HTSEditViewController.m in Sources */,
 				B7AE05ED24DEA0B400C8F037 /* HTSEditNameCell.m in Sources */,
 				B780D8A524BFF99D0003FE5B /* SceneDelegate.m in Sources */,

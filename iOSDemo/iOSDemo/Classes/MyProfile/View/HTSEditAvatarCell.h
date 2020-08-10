@@ -11,8 +11,16 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HTSEditAvatarCell : UITableViewCell
-- (void)setTitleStr:(NSString *)title valueStr:(NSString *)value;
+
+@property (nonatomic, assign) NSString *avatarUrl;
+@property (nonatomic, strong) UIImageView *avatar;
+
 + (CGFloat)cellHeight;
+
+
+- (void)setTitleStr:(NSString *)title;
+//- (void)bindWithViewModel:(HTSVideoCellViewModel *)viewModel;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -5,11 +5,15 @@
 //  Created by Shenmeng Yin on 2020-08-08.
 //  Copyright © 2020 Shenmeng Yin. All rights reserved.
 //
-
+#import <Masonry/Masonry.h>
 #import "HTSEditAvatarCell.h"
 
 @interface HTSEditAvatarCell ()
-@property (strong, nonatomic) UILabel *titleLabel, *valueLabel;
+
+@property (nonatomic, strong) UIView *container;
+@property (strong, nonatomic) UILabel *titleLabel;
+
+
 @end
 
 @implementation HTSEditAvatarCell
@@ -19,40 +23,45 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
+        _container = [[UIView alloc] initWithFrame:self.bounds];
+        [self addSubview:_container];
+        __weak typeof(self) weakSelf = self;
+        int avatarRadius = 48;
+        _avatar = [[UIImageView alloc] init];
+        _avatar.image = [UIImage imageNamed:@"defaultProfilePicture"];
+        _avatar.layer.cornerRadius = avatarRadius;
+        _avatar.layer.shouldRasterize = YES;
+        _avatar.clipsToBounds = YES;
+        [_container addSubview:_avatar];
+        [_avatar mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(weakSelf);
+            make.centerX.equalTo(weakSelf);
+            make.width.height.mas_equalTo(avatarRadius*2);
+        }];
 
         if (!_titleLabel) {
             _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 7, 100, 30)];
             _titleLabel.backgroundColor = [UIColor clearColor];
-            _titleLabel.font = [UIFont systemFontOfSize:16];
-            _titleLabel.textColor = [UIColor blackColor];
+            _titleLabel.font = [UIFont systemFontOfSize:14];
+            _titleLabel.textColor = [UIColor redColor];
             [self.contentView addSubview:_titleLabel];
-        }
-        if (!_valueLabel) {
-            _valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(120, 7, [UIScreen mainScreen].bounds.size.width -(110+10) - 30, 30)];
-            _valueLabel.backgroundColor = [UIColor clearColor];
-            _valueLabel.font = [UIFont systemFontOfSize:15];
-            _valueLabel.textColor = [UIColor blackColor];
-            _valueLabel.textAlignment = NSTextAlignmentRight;
-            _valueLabel.adjustsFontSizeToFitWidth = YES;
-            _valueLabel.minimumScaleFactor = 0.6;
-            [self.contentView addSubview:_valueLabel];
+            [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(self.avatar.mas_bottom).offset(10);
+                make.centerX.equalTo(weakSelf);
+            }];
         }
     }
     return self;
 }
 
-- (void)setTitleStr:(NSString *)title valueStr:(NSString *)value{
-    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    self.selectionStyle = UITableViewCellSelectionStyleDefault;
-
+- (void)setTitleStr:(NSString *)title{
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
     _titleLabel.text = title;
-    _valueLabel.text = value;
 }
 
 + (CGFloat)cellHeight{
-    return 44.0;
+    return 132.0;
 }
 
 - (void)awakeFromNib {
