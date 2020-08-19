@@ -227,7 +227,6 @@
 		B780D8D724C001420003FE5B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				B7AE05DB24C4280200C8F037 /* Common */,
 				B780D8DB24C002470003FE5B /* MyProfile */,
 			);
 			path = Classes;
@@ -252,7 +251,7 @@
 		B780D8DB24C002470003FE5B /* MyProfile */ = {
 			isa = PBXGroup;
 			children = (
-				B780D8DE24C002890003FE5B /* Controller */,
+				B780D8DE24C002890003FE5B /* ViewController */,
 				B780D8DF24C002960003FE5B /* Model */,
 				B780D8E024C002A40003FE5B /* View */,
 				B780D8E124C002B50003FE5B /* ViewModel */,
@@ -260,7 +259,7 @@
 			path = MyProfile;
 			sourceTree = "<group>";
 		};
-		B780D8DE24C002890003FE5B /* Controller */ = {
+		B780D8DE24C002890003FE5B /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
 				B780D8A624BFF99D0003FE5B /* HTSProfileViewController.h */,
@@ -268,7 +267,7 @@
 				B7AE05E224DD344D00C8F037 /* HTSEditViewController.h */,
 				B7AE05E324DD344D00C8F037 /* HTSEditViewController.m */,
 			);
-			path = Controller;
+			path = ViewController;
 			sourceTree = "<group>";
 		};
 		B780D8DF24C002960003FE5B /* Model */ = {
@@ -314,13 +313,6 @@
 				B7AE05DD24C4C9D900C8F037 /* HTSVideoCellViewModel.m */,
 			);
 			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		B7AE05DB24C4280200C8F037 /* Common */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Common;
 			sourceTree = "<group>";
 		};
 		BF360D198C94A86833937399 /* Pods */ = {
