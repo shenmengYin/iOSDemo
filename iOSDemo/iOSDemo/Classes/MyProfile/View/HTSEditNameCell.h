@@ -11,6 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HTSEditNameCell : UITableViewCell
+//@property (nonatomic, weak) id <UITextFieldDelegate>    delegate;
+
 - (void)setTitleStr:(NSString *)title valueStr:(NSString *)value;
 + (CGFloat)cellHeight;
 @end

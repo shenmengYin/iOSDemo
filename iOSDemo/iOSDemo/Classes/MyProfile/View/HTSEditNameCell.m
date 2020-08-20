@@ -7,9 +7,13 @@
 //
 
 #import "HTSEditNameCell.h"
+#import <Masonry/Masonry.h>
 
 @interface HTSEditNameCell ()
-@property (strong, nonatomic) UILabel *titleLabel, *valueLabel;
+@property (strong, nonatomic) UILabel *titleLabel;
+@property (strong, nonatomic) UILabel *wordCountLabel;
+@property (strong, nonatomic) UITextField *valueTextField;
+
 @end
 
 @implementation HTSEditNameCell
@@ -28,15 +32,25 @@
             _titleLabel.textColor = [UIColor blackColor];
             [self.contentView addSubview:_titleLabel];
         }
-        if (!_valueLabel) {
-            _valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(120, 7, [UIScreen mainScreen].bounds.size.width -(110+10) - 30, 30)];
-            _valueLabel.backgroundColor = [UIColor clearColor];
-            _valueLabel.font = [UIFont systemFontOfSize:15];
-            _valueLabel.textColor = [UIColor blackColor];
-            _valueLabel.textAlignment = NSTextAlignmentRight;
-            _valueLabel.adjustsFontSizeToFitWidth = YES;
-            _valueLabel.minimumScaleFactor = 0.6;
-            [self.contentView addSubview:_valueLabel];
+        if (!_valueTextField) {
+            _valueTextField = [[UITextField alloc] initWithFrame:CGRectMake(120, 7, [UIScreen mainScreen].bounds.size.width -(110+10) - 30, 30)];
+            _valueTextField.backgroundColor = [UIColor clearColor];
+            _valueTextField.font = [UIFont systemFontOfSize:15];
+            _valueTextField.textColor = [UIColor blackColor];
+            _valueTextField.textAlignment = NSTextAlignmentRight;
+            _valueTextField.adjustsFontSizeToFitWidth = YES;
+            _valueTextField.clearButtonMode = UITextFieldViewModeAlways;
+            //_valueTextField.delegate = self;
+            [_valueTextField addTarget:self action:@selector(textFieldDidChanged:) forControlEvents:UIControlEventEditingChanged];
+            //_valueTextField.minimumScaleFactor = 0.6;
+            [self.contentView addSubview:_valueTextField];
+        }
+        if (!_titleLabel) {
+            _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 7, 100, 30)];
+            _titleLabel.backgroundColor = [UIColor clearColor];
+            _titleLabel.font = [UIFont systemFontOfSize:16];
+            _titleLabel.textColor = [UIColor blackColor];
+            [self.contentView addSubview:_titleLabel];
         }
     }
     return self;
@@ -46,7 +60,7 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
 
     _titleLabel.text = title;
-    _valueLabel.text = value;
+    _valueTextField.text = value;
 }
 
 + (CGFloat)cellHeight{
@@ -62,6 +76,23 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+
+
+
+- (void)textFieldDidChanged:(UITextField *)textField {
+    UITextRange *selectedRange = textField.markedTextRange;
+    UITextPosition *position = [textField positionFromPosition:selectedRange.start offset:0];
+    if (position) {
+        return;
+    }
+    if (textField.text.length > 10) {
+        textField.text = [textField.text substringToIndex:10];
+    }
+    
+    // 剩余字数显示 UI 更新
+    
 }
 
 @end
