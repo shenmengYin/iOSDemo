@@ -8,8 +8,12 @@
 
 #import "HTSEditIdCell.h"
 
+#import <Masonry/Masonry.h>
+
 @interface HTSEditIdCell ()
-@property (strong, nonatomic) UILabel *titleLabel, *valueLabel;
+//@property (strong, nonatomic) UILabel *titleLabel;
+//@property (strong, nonatomic) UITextField *valueTextField;
+//@property (strong, nonatomic) UIButton *userIdCopyButton;
 @end
 
 @implementation HTSEditIdCell
@@ -28,15 +32,27 @@
             _titleLabel.textColor = [UIColor blackColor];
             [self.contentView addSubview:_titleLabel];
         }
-        if (!_valueLabel) {
-            _valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(120, 7, [UIScreen mainScreen].bounds.size.width -(110+10) - 30, 30)];
-            _valueLabel.backgroundColor = [UIColor clearColor];
-            _valueLabel.font = [UIFont systemFontOfSize:15];
-            _valueLabel.textColor = [UIColor blackColor];
-            _valueLabel.textAlignment = NSTextAlignmentRight;
-            _valueLabel.adjustsFontSizeToFitWidth = YES;
-            _valueLabel.minimumScaleFactor = 0.6;
-            [self.contentView addSubview:_valueLabel];
+        if (!_valueTextField) {
+            _valueTextField = [[UITextField alloc] initWithFrame:CGRectMake(120, 7, [UIScreen mainScreen].bounds.size.width -(110+10) - 90, 30)];
+            _valueTextField.backgroundColor = [UIColor clearColor];
+            _valueTextField.font = [UIFont systemFontOfSize:15];
+            _valueTextField.textColor = [UIColor blackColor];
+            _valueTextField.textAlignment = NSTextAlignmentLeft;
+            _valueTextField.adjustsFontSizeToFitWidth = YES;
+            [self.contentView addSubview:_valueTextField];
+        }
+        if (!_userIdCopyButton){
+            _userIdCopyButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            _userIdCopyButton.backgroundColor = [UIColor clearColor];
+            _userIdCopyButton.titleLabel.font = [UIFont systemFontOfSize:15];
+            [_userIdCopyButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            [_userIdCopyButton setTitle:@"点击复制" forState:UIControlStateNormal];
+            [_userIdCopyButton addTarget:self action:@selector(copyUserId:) forControlEvents:UIControlEventTouchUpInside];
+            [self.contentView addSubview:_userIdCopyButton];
+            [_userIdCopyButton mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.mas_equalTo(self.contentView.mas_top).offset(7);
+                make.right.mas_equalTo(self.contentView.mas_right).inset(15);
+            }];
         }
     }
     return self;
@@ -46,7 +62,7 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
 
     _titleLabel.text = title;
-    _valueLabel.text = value;
+    _valueTextField.text = value;
 }
 
 + (CGFloat)cellHeight{
@@ -60,8 +76,14 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
     // Configure the view for the selected state
+}
+
+-(void) copyUserId:(UIButton *)button{
+    __typeof(self.delegate) delegate = self.delegate;
+    if (delegate && [delegate respondsToSelector:@selector(editIdCell:copyUserId:)]) {
+        [delegate editIdCell:self copyUserId:self.valueTextField.text];
+    }
 }
 
 @end

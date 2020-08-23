@@ -10,9 +10,9 @@
 #import <Masonry/Masonry.h>
 
 @interface HTSEditNameCell ()
-@property (strong, nonatomic) UILabel *titleLabel;
-@property (strong, nonatomic) UILabel *wordCountLabel;
-@property (strong, nonatomic) UITextField *valueTextField;
+//@property (strong, nonatomic) UILabel *titleLabel;
+//@property (strong, nonatomic) UILabel *wordCountLabel;
+//@property (strong, nonatomic) UITextField *valueTextField;
 
 @end
 
@@ -33,24 +33,29 @@
             [self.contentView addSubview:_titleLabel];
         }
         if (!_valueTextField) {
-            _valueTextField = [[UITextField alloc] initWithFrame:CGRectMake(120, 7, [UIScreen mainScreen].bounds.size.width -(110+10) - 30, 30)];
+            _valueTextField = [[UITextField alloc] initWithFrame:CGRectMake(120, 7, [UIScreen mainScreen].bounds.size.width -(110+10) - 90, 30)];
             _valueTextField.backgroundColor = [UIColor clearColor];
             _valueTextField.font = [UIFont systemFontOfSize:15];
             _valueTextField.textColor = [UIColor blackColor];
-            _valueTextField.textAlignment = NSTextAlignmentRight;
+            _valueTextField.textAlignment = NSTextAlignmentLeft;
             _valueTextField.adjustsFontSizeToFitWidth = YES;
-            _valueTextField.clearButtonMode = UITextFieldViewModeAlways;
+            _valueTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
             //_valueTextField.delegate = self;
             [_valueTextField addTarget:self action:@selector(textFieldDidChanged:) forControlEvents:UIControlEventEditingChanged];
             //_valueTextField.minimumScaleFactor = 0.6;
             [self.contentView addSubview:_valueTextField];
         }
-        if (!_titleLabel) {
-            _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 7, 100, 30)];
-            _titleLabel.backgroundColor = [UIColor clearColor];
-            _titleLabel.font = [UIFont systemFontOfSize:16];
-            _titleLabel.textColor = [UIColor blackColor];
-            [self.contentView addSubview:_titleLabel];
+        if (!_wordCountLabel) {
+            _wordCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(240, 7, 100, 30)];
+            _wordCountLabel.backgroundColor = [UIColor clearColor];
+            _wordCountLabel.font = [UIFont systemFontOfSize:16];
+            _wordCountLabel.textColor = [UIColor grayColor];
+            [self.contentView addSubview:_wordCountLabel];
+            [_wordCountLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.mas_equalTo(self.contentView.mas_top).offset(7);
+                make.right.mas_equalTo(self.contentView.mas_right).inset(15);
+            }];
+            
         }
     }
     return self;
@@ -66,6 +71,7 @@
 + (CGFloat)cellHeight{
     return 44.0;
 }
+
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -92,6 +98,7 @@
     }
     
     // 剩余字数显示 UI 更新
+    _wordCountLabel.text = [NSString stringWithFormat:@"%lu/10", textField.text.length];
     
 }
 

@@ -39,6 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UILabel                      *followedNumTitle;
 
 - (void)initData:(HTSUserModel *)user;
+- (void)reloadUserInfo;
 
 @end
 

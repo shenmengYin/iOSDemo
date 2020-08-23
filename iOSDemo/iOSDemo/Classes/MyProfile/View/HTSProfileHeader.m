@@ -38,9 +38,19 @@
 }
 
 - (void) initAvatar {
+    NSArray *sandBoxPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsPath = [sandBoxPath objectAtIndex:0];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"user.plist"];
+    NSMutableDictionary *dataDic = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
     int avatarRadius = 48;
     _avatar = [[UIImageView alloc] init];
-    _avatar.image = [UIImage imageNamed:@"defaultProfilePicture"];
+    if(dataDic[@"avatar"]){
+        NSData *decodedImageData = [[NSData alloc] initWithBase64EncodedString:dataDic[@"avatar"] options:NSDataBase64EncodingEndLineWithLineFeed];
+        UIImage *decodedImage = [UIImage imageWithData:decodedImageData];
+        _avatar.image = decodedImage;
+    }else{
+        _avatar.image = [UIImage imageNamed:@"defaultProfilePicture"];
+    }
     _avatar.layer.cornerRadius = avatarRadius;
     _avatar.layer.shouldRasterize = YES;
     _avatar.clipsToBounds = YES;
@@ -76,8 +86,12 @@
 }
 
 - (void)initInfoView {
+    NSArray *sandBoxPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsPath = [sandBoxPath objectAtIndex:0];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"user.plist"];
+    NSMutableDictionary *dataDic = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
     _userName = [[UILabel alloc] init];
-    _userName.text = @"name";
+    _userName.text = dataDic[@"name"] ?: @"name";
     _userName.textColor = [UIColor blackColor];
     _userName.font = [UIFont boldSystemFontOfSize:26.0];
     [_container addSubview:_userName];
@@ -132,7 +146,7 @@
     }];
     
     _userIntro = [[UILabel alloc] init];
-    _userIntro.text = @"Intro placeholder";
+    _userIntro.text = dataDic[@"intro"] ?: @"Placeholder";
     _userIntro.textColor = [UIColor grayColor];
     _userIntro.font = [UIFont systemFontOfSize:14.0];
     _userIntro.preferredMaxLayoutWidth = [UIScreen mainScreen].bounds.size.width - 34;
@@ -235,6 +249,21 @@
     [_followedNum setText:[NSString stringWithFormat:@"%ld",(long)user.followerCount]];
 }
 
+-(void) reloadUserInfo{
+    NSArray *sandBoxPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsPath = [sandBoxPath objectAtIndex:0];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"user.plist"];
+    NSMutableDictionary *dataDic = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
+    if(dataDic[@"avatar"]){
+        NSData *decodedImageData = [[NSData alloc] initWithBase64EncodedString:dataDic[@"avatar"] options:NSDataBase64EncodingEndLineWithLineFeed];
+        UIImage *decodedImage = [UIImage imageWithData:decodedImageData];
+        _avatar.image = decodedImage;
+    }else{
+        _avatar.image = [UIImage imageNamed:@"defaultProfilePicture"];
+    }
+    _userName.text = dataDic[@"name"] ?: @"name";
+    _userIntro.text = dataDic[@"intro"] ?: @"Placeholder";
+}
 
 //Profile header delegate
 - (void)onTapAction:(UITapGestureRecognizer *)sender {

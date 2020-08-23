@@ -8,9 +8,10 @@
 
 #import "HTSProfileViewModel.h"
 #import "HTSVideoModel.h"
-#import <Mantle/Mantle.h>
 #import "HTSVideoCellViewModel.h"
 
+#import <Mantle/Mantle.h>
+#import <AFNetworking/AFNetworking.h>
 
 @interface HTSProfileViewModel ()
 @property (nonatomic) RACCommand *loadDataCommand;
@@ -19,6 +20,8 @@
 @end
 
 @implementation HTSProfileViewModel
+
+//static BOOL useLiveData = NO;
 
 - (instancetype)init{
     self = [super init];
@@ -39,7 +42,14 @@
 - (RACCommand *)loadDataCommand{
     if (!_loadDataCommand) {
         _loadDataCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
-            RACSignal *videoSignal = [self loadVideoData];
+            RACSignal *videoSignal;
+//            if(useLiveData){
+//                videoSignal = [self loadVideoDataLive];
+//            }
+//            else{
+//                videoSignal = [self loadVideoData];
+//            }
+            videoSignal = [self loadVideoData];
             return videoSignal;
         }];
     }
@@ -71,6 +81,47 @@
                 }
             }
         }
+        return [RACDisposable disposableWithBlock:^{
+            
+        }];
+    }] subscribeOn:[RACScheduler schedulerWithPriority:DISPATCH_QUEUE_PRIORITY_DEFAULT]];
+}
+
+- (RACSignal *)loadVideoDataLive{
+    return [[RACSignal createSignal:^RACDisposable *(id < RACSubscriber > subscriber) {
+        //AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        //manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+        //manager.requestSerializer.timeoutInterval = 30.0f;
+        
+        
+        NSString *urlString = @"http://localhost.charlesproxy.com:3000/mock";
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        [manager GET:urlString parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            NSLog(@"success: %@ -- %@", [responseObject class], responseObject);
+            //NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+            NSError *error = nil;
+            if (error) {
+                [subscriber sendError:error];
+            } else {
+                NSArray *videoData = responseObject[@"data"];
+                if (!videoData) {
+                    [subscriber sendError:[NSError errorWithDomain:@"Error JSON Data" code:500 userInfo:@{}]];
+                } else {
+                    NSArray *videoArray = [MTLJSONAdapter modelsOfClass:HTSVideoModel.class fromJSONArray:videoData error:&error];
+
+                    if (error) {
+                        [subscriber sendError:error];
+                    } else {
+                        [subscriber sendNext:videoArray];
+                        [subscriber sendCompleted];
+                    }
+                }
+            }
+            
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"failed");
+        }];
+        
         return [RACDisposable disposableWithBlock:^{
             
         }];

@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setTitleStr:(NSString *)title;
 //- (void)bindWithViewModel:(HTSVideoCellViewModel *)viewModel;
+- (void)setAvatarImage:(UIImage *)avatarImage;
 
 @end
 

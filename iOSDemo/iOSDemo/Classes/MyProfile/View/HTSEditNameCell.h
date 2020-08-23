@@ -10,11 +10,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface HTSEditNameCell : UITableViewCell
 //@property (nonatomic, weak) id <UITextFieldDelegate>    delegate;
+@property (strong, nonatomic) UILabel *titleLabel;
+@property (strong, nonatomic) UILabel *wordCountLabel;
+@property (strong, nonatomic) UITextField *valueTextField;
+
+
++ (CGFloat)cellHeight;
 
 - (void)setTitleStr:(NSString *)title valueStr:(NSString *)value;
-+ (CGFloat)cellHeight;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -55,9 +55,14 @@
     return self;
 }
 
+
 - (void)setTitleStr:(NSString *)title{
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     _titleLabel.text = title;
+}
+
+- (void)setAvatarImage:(UIImage *)avatarImage{
+    _avatar.image = avatarImage;
 }
 
 + (CGFloat)cellHeight{

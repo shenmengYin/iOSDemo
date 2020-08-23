@@ -64,11 +64,8 @@
 
 - (void)bindWithViewModel:(HTSVideoCellViewModel *)viewModel
 {
-    
     RAC(self, imageURL) = [viewModel.coverImageSignal takeUntil:self.rac_prepareForReuseSignal];
     RAC(self, likeButton.racExt_Title) = [viewModel.displaySignal takeUntil:self.rac_prepareForReuseSignal];
- 
-   
 }
 
 @end

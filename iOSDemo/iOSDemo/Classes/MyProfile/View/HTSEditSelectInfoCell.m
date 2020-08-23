@@ -9,7 +9,7 @@
 #import "HTSEditSelectInfoCell.h"
 
 @interface HTSEditSelectInfoCell ()
-@property (strong, nonatomic) UILabel *titleLabel, *valueLabel;
+//@property (strong, nonatomic) UILabel *titleLabel, *genderLabel, *birthdayLabel;
 @end
 
 @implementation HTSEditSelectInfoCell
@@ -28,16 +28,21 @@
             _titleLabel.textColor = [UIColor blackColor];
             [self.contentView addSubview:_titleLabel];
         }
-        if (!_valueLabel) {
-            _valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(120, 7, [UIScreen mainScreen].bounds.size.width -(110+10) - 30, 30)];
-            _valueLabel.backgroundColor = [UIColor clearColor];
-            _valueLabel.font = [UIFont systemFontOfSize:15];
-            _valueLabel.textColor = [UIColor blackColor];
-            _valueLabel.textAlignment = NSTextAlignmentRight;
-            _valueLabel.adjustsFontSizeToFitWidth = YES;
-            _valueLabel.minimumScaleFactor = 0.6;
-            [self.contentView addSubview:_valueLabel];
+        if (!_genderLabel) {
+            _genderLabel = [[UILabel alloc] initWithFrame:CGRectMake(120, 7, [UIScreen mainScreen].bounds.size.width -(110+10) - 30, 30)];
+            _genderLabel.backgroundColor = [UIColor clearColor];
+            _genderLabel.font = [UIFont systemFontOfSize:15];
+            _genderLabel.textColor = [UIColor blackColor];
+            _genderLabel.textAlignment = NSTextAlignmentLeft;
+            _genderLabel.adjustsFontSizeToFitWidth = YES;
+            _genderLabel.minimumScaleFactor = 0.6;
+            _genderLabel.userInteractionEnabled = YES;
+            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeGender:)];
+            [_genderLabel addGestureRecognizer:tapGesture];
+            [self.contentView addSubview:_genderLabel];
+            
         }
+
     }
     return self;
 }
@@ -46,7 +51,8 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
 
     _titleLabel.text = title;
-    _valueLabel.text = value;
+    _genderLabel.text = value;
+    _birthdayLabel.text = value;
 }
 
 + (CGFloat)cellHeight{
@@ -62,6 +68,34 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void) changeGender:(UITapGestureRecognizer *)tapGesture
+{
+    if ([self.delegate respondsToSelector:@selector(profileCellShouldBeginEditing:)]) {
+        if (![self.delegate profileCellShouldBeginEditing:self]) {
+            return;
+        }
+    }
+    
+    __typeof(self.delegate) delegate = self.delegate;
+    if (delegate && [delegate respondsToSelector:@selector(selectInfoCell:changeGender:)]) {
+        [delegate selectInfoCell:self changeGender:self.genderLabel.text];
+    }
+}
+
+- (void) changeBirthday:(UITapGestureRecognizer *)tapGesture
+{
+    if ([self.delegate respondsToSelector:@selector(profileCellShouldBeginEditing:)]) {
+        if (![self.delegate profileCellShouldBeginEditing:self]) {
+            return;
+        }
+    }
+    
+    __typeof(self.delegate) delegate = self.delegate;
+    if (delegate && [delegate respondsToSelector:@selector(selectInfoCell:changeBirthday:)]) {
+        [delegate selectInfoCell:self changeBirthday:self.birthdayLabel.text];
+    }
 }
 
 @end

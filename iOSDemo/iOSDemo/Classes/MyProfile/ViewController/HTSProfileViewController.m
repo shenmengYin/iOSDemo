@@ -34,33 +34,33 @@
 
 @implementation HTSProfileViewController
 
-//- (NSMutableArray *)videos{
-//    if (!_videos) {
-//        HTSVideoModel *video1 = [[HTSVideoModel alloc] init];
-//        video1.coverAddr = @"http://p9.pstatp.com/large/8fb9000a620557d48e9f.jpeg";
-//        video1.likeCount = 15;
-//        PlayAddress *playAddr = [[PlayAddress alloc] init];
-//        playAddr.uri = @"v0200ff70000bck86n4mavf9lsqsr7m0";
-//        playAddr.urlList = @[@"https://aweme.snssdk.com/aweme/v1/play/?video_id=v0200ff70000bck86n4mavf9lsqsr7m0&line=0&ratio=720p&media_type=4&vr_type=0&test_cdn=None&improve_bitrate=0", @"https://api.amemv.com/aweme/v1/play/?video_id=v0200ff70000bck86n4mavf9lsqsr7m0&line=0&ratio=720p&media_type=4&vr_type=0&test_cdn=None&improve_bitrate=0", @"https://aweme.snssdk.com/aweme/v1/play/?video_id=v0200ff70000bck86n4mavf9lsqsr7m0&line=1&ratio=720p&media_type=4&vr_type=0&test_cdn=None&improve_bitrate=0", @"https://api.amemv.com/aweme/v1/play/?video_id=v0200ff70000bck86n4mavf9lsqsr7m0&line=1&ratio=720p&media_type=4&vr_type=0&test_cdn=None&improve_bitrate=0"];
-//        video1.playAddr = playAddr;
-//        video1.playCount = 135;
-//        video1.videoID = @"001";
-//        _videos = [[NSMutableArray alloc] init];
-//        [_videos addObject:video1];
-//    }
-//    return _videos;
-//}
+-(void) viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [_profileHeader reloadUserInfo];
+}
 
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    [self initCollectionView];
-    
+-(void) viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [[_collectionView collectionViewLayout] invalidateLayout];
+    [self.collectionView reloadData];
     
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+//    [self initDefaultData];
+    [self initCollectionView];
+}
+
+//-(void)initDefaultData{
+//    NSArray *sandBoxPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//    NSString *documentsPath = [sandBoxPath objectAtIndex:0];
+//    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"userInfo.plist"];
+//}
+
 -(void)initCollectionView{
+    self.navigationController.navigationBarHidden = YES;
+    self.view.backgroundColor = [UIColor whiteColor];
     _viewModel = [[HTSProfileViewModel alloc] init];
     _itemWidth = (SCREEN_WIDTH - (CGFloat)(((NSInteger)(SCREEN_WIDTH)) % 3) ) / 3.0f - 1.0f;
     _itemHeight = _itemWidth * 1.35f;
@@ -124,7 +124,6 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"sizeForItemAtindexpath");
     return  CGSizeMake(_itemWidth, _itemHeight);
 }
 
@@ -152,8 +151,9 @@
     switch (tag) {
         case HTSProfileHeaderEditTag:{
             HTSEditViewController* editViewController = [[HTSEditViewController alloc] init];
-            editViewController.modalPresentationStyle = UIModalPresentationFullScreen;
-            [self presentViewController:editViewController animated:YES completion:nil];
+            [self.navigationController pushViewController:editViewController animated:YES];
+            //editViewController.modalPresentationStyle = UIModalPresentationFullScreen;
+            //[self presentViewController:editViewController animated:YES completion:nil];
             NSLog(@"Edit button tapped");
             break;
         }
