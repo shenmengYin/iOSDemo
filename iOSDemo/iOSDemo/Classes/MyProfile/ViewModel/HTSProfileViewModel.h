@@ -10,16 +10,17 @@
 #import <ReactiveCocoa/ReactiveCocoa.h>
 
 
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HTSProfileViewModel : NSObject
 
-@property (nonatomic, readonly) RACSignal *dataSignal;
-@property (nonatomic, readonly) RACSignal *errorSignal;
-@property (nonatomic, readonly) RACCommand *loadDataCommand;
+//@property (nonatomic, readonly) RACSignal *dataSignal;  // <NSArray<HTSVideoModel *> *>
+//@property (nonatomic, readonly) RACSignal *errorSignal;
+//@property (nonatomic, readonly) RACCommand *loadDataCommand;
 
-- (RACSignal *)loadVideoData;
+- (NSArray *)loadVideoData;
+
+//- (RACSignal *)loadVideoData;
 
 @end
 

@@ -57,6 +57,11 @@
     return self;
 }
 
+- (void)updateWithImageURL:(NSString*) imageURL likeCount:(NSInteger) likeCount{
+    [_likeButton setTitle:[@(likeCount) stringValue] forState:UIControlStateNormal];
+    [_coverImageView sd_setImageWithURL:[NSURL URLWithString:imageURL] placeholderImage:[UIImage imageNamed:@"cover"]];
+}
+
 //-(void)initWithVideo:(HTSVideoModel *)video{
 //    [self.imageView setImage:[UIImage imageNamed:@"cover"]];
 //    [self.likeButton setTitle:[NSString stringWithFormat: @"%ld", video.likeCount] forState:UIControlStateNormal];

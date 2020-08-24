@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		232967A63E48287C0440C133 /* Pods_iOSDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51930674D2616F40E7837F49 /* Pods_iOSDemoTests.framework */; };
+		2B9B88D724F2430B00AF62F9 /* HTSEditViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B9B88D624F2430B00AF62F9 /* HTSEditViewModel.m */; };
+		2B9B88DA24F24F5000AF62F9 /* HTSEditAvatarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B9B88D924F24F5000AF62F9 /* HTSEditAvatarView.m */; };
+		2B9B88E024F28D9300AF62F9 /* HTSProfileEditTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B9B88DF24F28D9300AF62F9 /* HTSProfileEditTextCell.m */; };
+		2B9B88E624F3CBF100AF62F9 /* HTSDatePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B9B88E524F3CBF100AF62F9 /* HTSDatePickerView.m */; };
 		5F210DDC1C28365C423BE47B /* Pods_iOSDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54D2ED963368C828A3DBBB0A /* Pods_iOSDemo.framework */; };
 		74E1204ED4BDE665733AF99F /* Pods_iOSDemo_iOSDemoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE08F117BAFC941B61E5A6F2 /* Pods_iOSDemo_iOSDemoUITests.framework */; };
 		B76753FF24E14E44001A93C0 /* HTSSelectImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B76753FE24E14E44001A93C0 /* HTSSelectImageManager.m */; };
@@ -28,8 +32,6 @@
 		B7AE05DE24C4C9D900C8F037 /* HTSVideoCellViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05DD24C4C9D900C8F037 /* HTSVideoCellViewModel.m */; };
 		B7AE05E124C93C9200C8F037 /* HTSProfileHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05E024C93C9200C8F037 /* HTSProfileHeader.m */; };
 		B7AE05E424DD344D00C8F037 /* HTSEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05E324DD344D00C8F037 /* HTSEditViewController.m */; };
-		B7AE05ED24DEA0B400C8F037 /* HTSEditNameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05EC24DEA0B400C8F037 /* HTSEditNameCell.m */; };
-		B7AE05F024DEA0CB00C8F037 /* HTSEditIdCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05EF24DEA0CB00C8F037 /* HTSEditIdCell.m */; };
 		B7AE05F324DEA10300C8F037 /* HTSEditSelectInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05F224DEA10300C8F037 /* HTSEditSelectInfoCell.m */; };
 		B7AE05F624DEA12600C8F037 /* HTSEditAvatarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05F524DEA12600C8F037 /* HTSEditAvatarCell.m */; };
 		B7AE05F924DEA13600C8F037 /* HTSEditIntroCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AE05F824DEA13600C8F037 /* HTSEditIntroCell.m */; };
@@ -53,6 +55,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2B9B88D524F2430B00AF62F9 /* HTSEditViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSEditViewModel.h; sourceTree = "<group>"; };
+		2B9B88D624F2430B00AF62F9 /* HTSEditViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSEditViewModel.m; sourceTree = "<group>"; };
+		2B9B88D824F24F5000AF62F9 /* HTSEditAvatarView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSEditAvatarView.h; sourceTree = "<group>"; };
+		2B9B88D924F24F5000AF62F9 /* HTSEditAvatarView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSEditAvatarView.m; sourceTree = "<group>"; };
+		2B9B88DE24F28D9300AF62F9 /* HTSProfileEditTextCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSProfileEditTextCell.h; sourceTree = "<group>"; };
+		2B9B88DF24F28D9300AF62F9 /* HTSProfileEditTextCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSProfileEditTextCell.m; sourceTree = "<group>"; };
+		2B9B88E424F3CBF100AF62F9 /* HTSDatePickerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSDatePickerView.h; sourceTree = "<group>"; };
+		2B9B88E524F3CBF100AF62F9 /* HTSDatePickerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSDatePickerView.m; sourceTree = "<group>"; };
 		4B703D4DD220F378DDB90949 /* Pods-iOSDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOSDemo.release.xcconfig"; path = "Target Support Files/Pods-iOSDemo/Pods-iOSDemo.release.xcconfig"; sourceTree = "<group>"; };
 		51930674D2616F40E7837F49 /* Pods_iOSDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOSDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		54D2ED963368C828A3DBBB0A /* Pods_iOSDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOSDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -92,10 +102,6 @@
 		B7AE05E024C93C9200C8F037 /* HTSProfileHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSProfileHeader.m; sourceTree = "<group>"; };
 		B7AE05E224DD344D00C8F037 /* HTSEditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSEditViewController.h; sourceTree = "<group>"; };
 		B7AE05E324DD344D00C8F037 /* HTSEditViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSEditViewController.m; sourceTree = "<group>"; };
-		B7AE05EB24DEA0B400C8F037 /* HTSEditNameCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSEditNameCell.h; sourceTree = "<group>"; };
-		B7AE05EC24DEA0B400C8F037 /* HTSEditNameCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSEditNameCell.m; sourceTree = "<group>"; };
-		B7AE05EE24DEA0CB00C8F037 /* HTSEditIdCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSEditIdCell.h; sourceTree = "<group>"; };
-		B7AE05EF24DEA0CB00C8F037 /* HTSEditIdCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSEditIdCell.m; sourceTree = "<group>"; };
 		B7AE05F124DEA10300C8F037 /* HTSEditSelectInfoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSEditSelectInfoCell.h; sourceTree = "<group>"; };
 		B7AE05F224DEA10300C8F037 /* HTSEditSelectInfoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTSEditSelectInfoCell.m; sourceTree = "<group>"; };
 		B7AE05F424DEA12600C8F037 /* HTSEditAvatarCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTSEditAvatarCell.h; sourceTree = "<group>"; };
@@ -240,6 +246,8 @@
 		B780D8D924C002080003FE5B /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				B76753FD24E14E43001A93C0 /* HTSSelectImageManager.h */,
+				B76753FE24E14E44001A93C0 /* HTSSelectImageManager.m */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -273,8 +281,6 @@
 				B780D8E724C021EE0003FE5B /* HTSUserModel.m */,
 				B780D8E924C021FF0003FE5B /* HTSVideoModel.h */,
 				B780D8EA24C021FF0003FE5B /* HTSVideoModel.m */,
-				B76753FD24E14E43001A93C0 /* HTSSelectImageManager.h */,
-				B76753FE24E14E44001A93C0 /* HTSSelectImageManager.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -288,16 +294,18 @@
 				B780D8F424C273E30003FE5B /* HTSProfileCollectionViewLayout.m */,
 				B7AE05DF24C93C9200C8F037 /* HTSProfileHeader.h */,
 				B7AE05E024C93C9200C8F037 /* HTSProfileHeader.m */,
-				B7AE05EB24DEA0B400C8F037 /* HTSEditNameCell.h */,
-				B7AE05EC24DEA0B400C8F037 /* HTSEditNameCell.m */,
-				B7AE05EE24DEA0CB00C8F037 /* HTSEditIdCell.h */,
-				B7AE05EF24DEA0CB00C8F037 /* HTSEditIdCell.m */,
 				B7AE05F124DEA10300C8F037 /* HTSEditSelectInfoCell.h */,
 				B7AE05F224DEA10300C8F037 /* HTSEditSelectInfoCell.m */,
 				B7AE05F424DEA12600C8F037 /* HTSEditAvatarCell.h */,
 				B7AE05F524DEA12600C8F037 /* HTSEditAvatarCell.m */,
 				B7AE05F724DEA13600C8F037 /* HTSEditIntroCell.h */,
 				B7AE05F824DEA13600C8F037 /* HTSEditIntroCell.m */,
+				2B9B88D824F24F5000AF62F9 /* HTSEditAvatarView.h */,
+				2B9B88D924F24F5000AF62F9 /* HTSEditAvatarView.m */,
+				2B9B88DE24F28D9300AF62F9 /* HTSProfileEditTextCell.h */,
+				2B9B88DF24F28D9300AF62F9 /* HTSProfileEditTextCell.m */,
+				2B9B88E424F3CBF100AF62F9 /* HTSDatePickerView.h */,
+				2B9B88E524F3CBF100AF62F9 /* HTSDatePickerView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -309,6 +317,8 @@
 				B7AE05D924C41E1300C8F037 /* HTSProfileViewModel.m */,
 				B7AE05DC24C4C9D900C8F037 /* HTSVideoCellViewModel.h */,
 				B7AE05DD24C4C9D900C8F037 /* HTSVideoCellViewModel.m */,
+				2B9B88D524F2430B00AF62F9 /* HTSEditViewModel.h */,
+				2B9B88D624F2430B00AF62F9 /* HTSEditViewModel.m */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -572,11 +582,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B9B88D724F2430B00AF62F9 /* HTSEditViewModel.m in Sources */,
 				B7AE05F324DEA10300C8F037 /* HTSEditSelectInfoCell.m in Sources */,
 				B780D8F524C273E30003FE5B /* HTSProfileCollectionViewLayout.m in Sources */,
 				B7AE05F624DEA12600C8F037 /* HTSEditAvatarCell.m in Sources */,
 				B780D8A824BFF99D0003FE5B /* HTSProfileViewController.m in Sources */,
-				B7AE05F024DEA0CB00C8F037 /* HTSEditIdCell.m in Sources */,
+				2B9B88E024F28D9300AF62F9 /* HTSProfileEditTextCell.m in Sources */,
 				B7AE05E124C93C9200C8F037 /* HTSProfileHeader.m in Sources */,
 				B780D8F224C15B550003FE5B /* HTSVideoCollectionViewCell.m in Sources */,
 				B780D8EB24C021FF0003FE5B /* HTSVideoModel.m in Sources */,
@@ -584,10 +595,11 @@
 				B780D8E824C021EE0003FE5B /* HTSUserModel.m in Sources */,
 				B780D8A224BFF99D0003FE5B /* AppDelegate.m in Sources */,
 				B780D8B324BFF9A00003FE5B /* main.m in Sources */,
+				2B9B88DA24F24F5000AF62F9 /* HTSEditAvatarView.m in Sources */,
 				B7AE05DE24C4C9D900C8F037 /* HTSVideoCellViewModel.m in Sources */,
+				2B9B88E624F3CBF100AF62F9 /* HTSDatePickerView.m in Sources */,
 				B76753FF24E14E44001A93C0 /* HTSSelectImageManager.m in Sources */,
 				B7AE05E424DD344D00C8F037 /* HTSEditViewController.m in Sources */,
-				B7AE05ED24DEA0B400C8F037 /* HTSEditNameCell.m in Sources */,
 				B7AE05F924DEA13600C8F037 /* HTSEditIntroCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -751,14 +763,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = B24B3N7L69;
+				DEVELOPMENT_TEAM = 3NFBQ37H2C;
 				INFOPLIST_FILE = iOSDemo/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.syin.iOSDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ay97.iOSDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -770,14 +782,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = B24B3N7L69;
+				DEVELOPMENT_TEAM = 3NFBQ37H2C;
 				INFOPLIST_FILE = iOSDemo/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.syin.iOSDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ay97.iOSDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

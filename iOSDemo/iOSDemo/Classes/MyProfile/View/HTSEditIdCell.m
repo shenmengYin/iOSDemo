@@ -79,7 +79,7 @@
     // Configure the view for the selected state
 }
 
--(void) copyUserId:(UIButton *)button{
+- (void)copyUserId:(UIButton *)button{
     __typeof(self.delegate) delegate = self.delegate;
     if (delegate && [delegate respondsToSelector:@selector(editIdCell:copyUserId:)]) {
         [delegate editIdCell:self copyUserId:self.valueTextField.text];

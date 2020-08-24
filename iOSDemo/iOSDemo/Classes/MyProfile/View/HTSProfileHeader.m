@@ -8,14 +8,17 @@
 
 #import "HTSProfileHeader.h"
 #import "HTSUserModel.h"
-#import <Masonry/Masonry.h>
 #import "HTSEditViewController.h"
+#import "HTSEditViewModel.h"
+
+#import <Masonry/Masonry.h>
 
 #define SafeAreaTopHeight (([UIScreen mainScreen].bounds.size.height >= 812.0) && [[UIDevice currentDevice].model isEqualToString:@"iPhone"] ? 88 : 64)
 
 @interface HTSProfileHeader ()
 
 @property (nonatomic, strong) UIView *container;
+@property (nonatomic, strong) HTSEditViewModel *viewModel;
 
 @end
 
@@ -31,21 +34,18 @@
 
 - (void)initSubViews {
     _container = [[UIView alloc] initWithFrame:self.bounds];
+    _viewModel = [[HTSEditViewModel alloc] init];
     [self addSubview:_container];
     [self initAvatar];
     [self initActionsView];
     [self initInfoView];
 }
 
-- (void) initAvatar {
-    NSArray *sandBoxPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsPath = [sandBoxPath objectAtIndex:0];
-    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"user.plist"];
-    NSMutableDictionary *dataDic = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
+- (void)initAvatar {
     int avatarRadius = 48;
     _avatar = [[UIImageView alloc] init];
-    if(dataDic[@"avatar"]){
-        NSData *decodedImageData = [[NSData alloc] initWithBase64EncodedString:dataDic[@"avatar"] options:NSDataBase64EncodingEndLineWithLineFeed];
+    if([self.viewModel readFromLocalData:@"avatar"]){
+        NSData *decodedImageData = [[NSData alloc] initWithBase64EncodedString:[self.viewModel readFromLocalData:@"avatar"] options:NSDataBase64EncodingEndLineWithLineFeed];
         UIImage *decodedImage = [UIImage imageWithData:decodedImageData];
         _avatar.image = decodedImage;
     }else{
@@ -64,7 +64,7 @@
 }
 
 
-- (void) initActionsView {
+- (void)initActionsView {
     _editButton = [[UIButton alloc] init];
     [_editButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 2, 0, 0)];
     [_editButton setTitle:@"编辑" forState:UIControlStateNormal];
@@ -86,12 +86,8 @@
 }
 
 - (void)initInfoView {
-    NSArray *sandBoxPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsPath = [sandBoxPath objectAtIndex:0];
-    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"user.plist"];
-    NSMutableDictionary *dataDic = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
     _userName = [[UILabel alloc] init];
-    _userName.text = dataDic[@"name"] ?: @"name";
+    _userName.text = [self.viewModel readFromLocalData:@"昵称"];
     _userName.textColor = [UIColor blackColor];
     _userName.font = [UIFont boldSystemFontOfSize:26.0];
     [_container addSubview:_userName];
@@ -146,7 +142,7 @@
     }];
     
     _userIntro = [[UILabel alloc] init];
-    _userIntro.text = dataDic[@"intro"] ?: @"Placeholder";
+    _userIntro.text = [self.viewModel readFromLocalData:@"intro"];
     _userIntro.textColor = [UIColor grayColor];
     _userIntro.font = [UIFont systemFontOfSize:14.0];
     _userIntro.preferredMaxLayoutWidth = [UIScreen mainScreen].bounds.size.width - 34;
@@ -249,20 +245,16 @@
     [_followedNum setText:[NSString stringWithFormat:@"%ld",(long)user.followerCount]];
 }
 
--(void) reloadUserInfo{
-    NSArray *sandBoxPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsPath = [sandBoxPath objectAtIndex:0];
-    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"user.plist"];
-    NSMutableDictionary *dataDic = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
-    if(dataDic[@"avatar"]){
-        NSData *decodedImageData = [[NSData alloc] initWithBase64EncodedString:dataDic[@"avatar"] options:NSDataBase64EncodingEndLineWithLineFeed];
+- (void)reloadUserInfo{
+    if([self.viewModel readFromLocalData:@"avatar"]){
+        NSData *decodedImageData = [[NSData alloc] initWithBase64EncodedString:[self.viewModel readFromLocalData:@"avatar"] options:NSDataBase64EncodingEndLineWithLineFeed];
         UIImage *decodedImage = [UIImage imageWithData:decodedImageData];
         _avatar.image = decodedImage;
     }else{
         _avatar.image = [UIImage imageNamed:@"defaultProfilePicture"];
     }
-    _userName.text = dataDic[@"name"] ?: @"name";
-    _userIntro.text = dataDic[@"intro"] ?: @"Placeholder";
+    _userName.text = [self.viewModel readFromLocalData:@"昵称"] ?: @"";
+    _userIntro.text = [self.viewModel readFromLocalData:@"intro"] ?: @"";
 }
 
 //Profile header delegate

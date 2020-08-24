@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol HTSEditIdCellDelegate <NSObject>
 
--(void) editIdCell:(HTSEditIdCell *)cell copyUserId:(NSString *)userId;             /* 复制火山ID */
+- (void)editIdCell:(HTSEditIdCell *)cell copyUserId:(NSString *)userId;             /* 复制火山ID */
 
 @end
 

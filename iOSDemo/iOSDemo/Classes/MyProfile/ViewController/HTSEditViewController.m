@@ -8,25 +8,30 @@
 
 
 #import "HTSEditViewController.h"
-#import "HTSEditNameCell.h"
-#import "HTSEditIdCell.h"
 #import "HTSEditIntroCell.h"
 #import "HTSEditAvatarCell.h"
 #import "HTSEditSelectInfoCell.h"
-#import <Masonry/Masonry.h>
+#import "HTSEditAvatarView.h"
 #import "HTSSelectImageManager.h"
+#import "HTSEditViewModel.h"
+#import "HTSProfileEditTextCell.h"
+#import "HTSProfileEditTextCell.h"
+#import "HTSDatePickerView.h"
+
+#import <Masonry/Masonry.h>
 
 
 
-@interface HTSEditViewController () <HTSSelectImageManagerDelegate, HTSEditIdCellDelegate, HTSEditSelectInfoCellDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
-@property (strong, nonatomic) UITableView *myTableView;
-@property (strong, nonatomic) UIAlertController *actionController;
-@property (nonatomic,strong) HTSSelectImageManager *imageManager;
-@property (nonatomic, strong) UIView *maskView;
-@property (nonatomic, strong) UIView *genderView;
-@property (nonatomic, strong) UIPickerView *genderPicker;
-@property (nonatomic, assign) NSInteger genderType;
-@property (nonatomic, strong) UIToolbar *genderToolBar;
+
+@interface HTSEditViewController () <HTSSelectImageManagerDelegate, HTSProfileEditTextCellDelegate, HTSEditSelectInfoCellDelegate, HTSEditAvatarViewDelegate, HTSDatePickerViewDelegate>
+@property (nonatomic, strong) HTSEditViewModel *viewModel;
+@property (nonatomic, strong) HTSEditSelectInfoCell *currentCell;
+@property (nonatomic, strong) NSMutableArray *cellArray;
+@property (nonatomic, strong) HTSEditAvatarView *editAvatarView;
+@property (nonatomic, strong) UITableView *myTableView;
+@property (nonatomic, strong) UIAlertController *actionController;
+@property (nonatomic, strong) HTSSelectImageManager *imageManager;
+@property (nonatomic, strong) HTSDatePickerView *datePickerView;
 
 @end
 
@@ -35,28 +40,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"编辑资料";
-    _myTableView = ({
-        UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
-        tableView.backgroundColor = [self colorWithHexString:@"#F0F0F0"];
-        tableView.dataSource = self;
-        tableView.delegate = self;
-        tableView.scrollEnabled = NO;
-        tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        [tableView registerClass:[HTSEditAvatarCell class] forCellReuseIdentifier:@"HTSEditAvatarCell"];
-        [tableView registerClass:[HTSEditNameCell class] forCellReuseIdentifier:@"HTSEditNameCell"];
-        [tableView registerClass:[HTSEditIdCell class] forCellReuseIdentifier:@"HTSEditIdCell"];
-        [tableView registerClass:[HTSEditSelectInfoCell class] forCellReuseIdentifier:@"HTSEditSelectInfoCell"];
-        [tableView registerClass:[HTSEditIntroCell class] forCellReuseIdentifier:@"HTSEditIntroCell"];
-        [self.view addSubview:tableView];
-        [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self.view);
-        }];
-        tableView.estimatedRowHeight = 0;
-        tableView.estimatedSectionHeaderHeight = 0;
-        tableView.estimatedSectionFooterHeight = 0;
-        tableView;
-    });
+    self.viewModel = [[HTSEditViewModel alloc] init];
+    //[self.viewModel writeToLocalDataWithKey:@"昵称" value:@"test"];
     [self configNavBar];
+    [self setupUIComponents];
     
     // Do any additional setup after loading the view.
 }
@@ -73,7 +60,8 @@
 
 
 -(void)setupUIComponents {
-    
+    [self.view addSubview:self.editAvatarView];
+    [self.view addSubview:self.myTableView];
 }
 
 -(void)configNavBar{
@@ -83,12 +71,72 @@
                                    target:self
                                    action:@selector(saveEdit)];
     self.navigationItem.rightBarButtonItem = saveButton;
-    //[saveButton release];
 }
 
--(void)setupHeader {
-    
+- (UITableView *)myTableView{
+    if(!_myTableView){
+        _myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height/3, self.view.bounds.size.width, self.view.bounds.size.height) style:UITableViewStyleGrouped];
+        _myTableView.scrollEnabled = YES;
+        _myTableView.backgroundColor = [UIColor whiteColor];
+        _myTableView.dataSource = self;
+        _myTableView.delegate = self;
+        _myTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        _myTableView.separatorColor = [UIColor grayColor];
+        [_myTableView registerClass:[HTSProfileEditTextCell class] forCellReuseIdentifier:@"HTSProfileEditTextCell"];
+        [_myTableView registerClass:[HTSEditSelectInfoCell class] forCellReuseIdentifier:@"HTSEditSelectInfoCell"];
+        [_myTableView registerClass:[HTSEditIntroCell class] forCellReuseIdentifier:@"HTSEditIntroCell"];
+        _myTableView.estimatedRowHeight = 0;
+        _myTableView.estimatedSectionHeaderHeight = 0;
+        _myTableView.estimatedSectionFooterHeight = 0;
+    }
+    return _myTableView;
 }
+
+- (HTSEditAvatarView *)editAvatarView{
+    if(!_editAvatarView){
+        _editAvatarView = [[HTSEditAvatarView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height / 3)];
+        [_editAvatarView setLabelStr:@"点击更换头像"];
+        if([self.viewModel readFromLocalData:@"avatar"]){
+            NSData *decodedImageData = [[NSData alloc] initWithBase64EncodedString:[self.viewModel readFromLocalData:@"avatar"] options:NSDataBase64EncodingEndLineWithLineFeed];
+            UIImage *decodedImage = [UIImage imageWithData:decodedImageData];
+            [_editAvatarView setAvatarImage:decodedImage];
+        }else{
+            [_editAvatarView setAvatarImage:[UIImage imageNamed:@"defaultProfilePicture"]];
+        }
+        _editAvatarView.delegate = self;
+    }
+    return _editAvatarView;
+}
+
+- (NSMutableArray *)cellArray{
+    _cellArray = [[NSMutableArray alloc] init];
+    for(NSString *cellTitle in [self.viewModel textEditItemArray]){
+        HTSProfileEditTextCell *cell = [[HTSProfileEditTextCell alloc] init];
+        [cell setTitleStr:cellTitle valueStr:[self.viewModel readFromLocalData:cellTitle]];
+        cell.delegate = self;
+        [_cellArray addObject:cell];
+    }
+    for(NSString *cellTitle in [self.viewModel pickerItemArray]){
+        HTSEditSelectInfoCell *cell = [[HTSEditSelectInfoCell alloc] init];
+        [cell setTitleStr:cellTitle valueStr:[self.viewModel readFromLocalData:cellTitle]];
+        cell.delegate = self;
+        [_cellArray addObject:cell];
+    }
+    return _cellArray;
+}
+
+- (HTSDatePickerView *)datePickerView
+{
+    if (!_datePickerView) {
+        CGFloat startY = self.view.bounds.size.height - 260;
+        CGRect frame = CGRectMake(0, startY, self.view.bounds.size.width, 260);
+        _datePickerView = [[HTSDatePickerView alloc] initWithFrame:frame];
+        UIColor *color = [UIColor colorWithRed:241.0/255.0 green:241.0/255.0 blue:241.0/255.0 alpha:1.0];
+        _datePickerView.backgroundColor = color;
+    }
+    return _datePickerView;
+}
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 0.01;
@@ -96,184 +144,104 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 3;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSInteger row;
+    NSInteger row = 1;
     switch (section) {
         case 0:
-            row = 1;
-            break;
-        case 1:
-            row = 4;
-            break;
-        case 2:
-            row = 1;
-            break;
-        default:
-            row = 1;
+            row = [self.cellArray count];
             break;
     }
     return row;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSArray *sandBoxPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsPath = [sandBoxPath objectAtIndex:0];
-    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"user.plist"];
-    NSMutableDictionary *dataDic = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
-    if (indexPath.section == 0) {
-        HTSEditAvatarCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HTSEditAvatarCell" forIndexPath:indexPath];
-        if(dataDic[@"avatar"]){
-            NSData *decodedImageData = [[NSData alloc] initWithBase64EncodedString:dataDic[@"avatar"] options:NSDataBase64EncodingEndLineWithLineFeed];
-            UIImage *decodedImage = [UIImage imageWithData:decodedImageData];
-            [cell setAvatarImage:decodedImage];
-        }
-        else{
-            [cell setAvatarImage:[UIImage imageNamed:@"defaultProfilePicture"]];
-        }
-        [cell setTitleStr:@"点击更换头像"];
-        //cell.curUser = _curUser;
-        //[tableView addLineforPlainCell:cell forRowAtIndexPath:indexPath withLeftSpace:kPaddingLeftWidth];
-        return cell;
-    }else if (indexPath.section == 1){
-        switch (indexPath.row){
-            case 0:
-                {
-                HTSEditNameCell *cell;
-                cell = [tableView dequeueReusableCellWithIdentifier:@"HTSEditNameCell" forIndexPath:indexPath];
-                [cell setTitleStr:@"昵称" valueStr:dataDic[@"name"]];
-                //[tableView addLineforPlainCell:cell forRowAtIndexPath:indexPath withLeftSpace:kPaddingLeftWidth];
-                return cell;
-                }
-            case 1:
-            {
-                HTSEditIdCell *cell;
-                cell = [tableView dequeueReusableCellWithIdentifier:@"HTSEditIdCell" forIndexPath:indexPath];
-                [cell setTitleStr:@"火山号" valueStr:dataDic[@"user_id"]];
-                cell.delegate = self;
-                //[tableView addLineforPlainCell:cell forRowAtIndexPath:indexPath withLeftSpace:kPaddingLeftWidth];
-                return cell;
-            }
-            case 2:
-            {
-                HTSEditSelectInfoCell *cell;
-                cell = [tableView dequeueReusableCellWithIdentifier:@"HTSEditSelectInfoCell" forIndexPath:indexPath];
-                [cell setTitleStr:@"性别" valueStr:dataDic[@"gender"]];
-                cell.delegate = self;
-                return cell;
-                break;
-            }
-            case 3:
-            {
-                HTSEditSelectInfoCell *cell;
-                cell = [tableView dequeueReusableCellWithIdentifier:@"HTSEditSelectInfoCell" forIndexPath:indexPath];
-                [cell setTitleStr:@"生日" valueStr:dataDic[@"birthday"]];
-                return cell;
-                break;
-            }
-            default:
-            {
-                HTSEditNameCell *cell;
-                cell = [tableView dequeueReusableCellWithIdentifier:@"HTSEditNameCell" forIndexPath:indexPath];
-                [cell setTitleStr:@"昵称" valueStr:dataDic[@"name"]];
-                //[tableView addLineforPlainCell:cell forRowAtIndexPath:indexPath withLeftSpace:kPaddingLeftWidth];
-                return cell;
-            }
-        }
+    if (indexPath.section == 0){
+        return [self.cellArray objectAtIndex:indexPath.row];
+//        NSArray *textEditCellArray = [self.viewModel textEditItemArray];
+//        NSString *cellTitle = [textEditCellArray objectAtIndex:indexPath.row];
+//        HTSProfileEditTextCell *textCell = [tableView dequeueReusableCellWithIdentifier:@"HTSProfileEditTextCell"];
+//        [textCell setTitleStr:cellTitle valueStr:@""];
+//        return textCell;
+//        switch (indexPath.row){
+//            case 0:
+//                {
+//                HTSProfileEditTextCell *cell;
+//                cell = [tableView dequeueReusableCellWithIdentifier:@"HTSProfileEditTextCell" forIndexPath:indexPath];
+//                    [cell setTitleStr:@"昵称" valueStr:[self.viewModel readFromLocalData:@"name"]];
+//                return cell;
+//                }
+//            case 1:
+//            {
+//                HTSProfileEditTextCell *cell;
+//                cell = [tableView dequeueReusableCellWithIdentifier:@"HTSProfileEditTextCell" forIndexPath:indexPath];
+//                [cell setTitleStr:@"火山号" valueStr:[self.viewModel readFromLocalData:@"user_id"]];
+//                cell.delegate = self;
+//                return cell;
+//            }
+//            case 2:
+//            {
+//                HTSEditSelectInfoCell *cell;
+//                cell = [tableView dequeueReusableCellWithIdentifier:@"HTSEditSelectInfoCell" forIndexPath:indexPath];
+//                [cell setTitleStr:@"性别" valueStr:[self.viewModel readFromLocalData:@"gender"]];
+//                cell.delegate = self;
+//                return cell;
+//                break;
+//            }
+//            case 3:
+//            {
+//                HTSEditSelectInfoCell *cell;
+//                cell = [tableView dequeueReusableCellWithIdentifier:@"HTSEditSelectInfoCell" forIndexPath:indexPath];
+//                [cell setTitleStr:@"生日" valueStr:[self.viewModel readFromLocalData:@"birthday"]];
+//                return cell;
+//                break;
+//            }
+//            default:
+//            {
+//                HTSProfileEditTextCell *cell;
+//                cell = [tableView dequeueReusableCellWithIdentifier:@"HTSProfileEditTextCell" forIndexPath:indexPath];
+//                [cell setTitleStr:@"昵称" valueStr:[self.viewModel readFromLocalData:@"name"]];
+//                //[tableView addLineforPlainCell:cell forRowAtIndexPath:indexPath withLeftSpace:kPaddingLeftWidth];
+//                return cell;
+//            }
+//        }
     }
-    else if(indexPath.section == 2 && indexPath.row == 0){
+    else{//} if(indexPath.section == 1){
         HTSEditIntroCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HTSEditIntroCell" forIndexPath:indexPath];
-        [cell setViewText:dataDic[@"intro"]];
+        [cell setViewText:[self.viewModel readFromLocalData:@"intro"]];
         NSLog(@"section: %ld, row:%ld", indexPath.section, indexPath.row);
         return cell;
+
     }
-    HTSEditNameCell *cell;
-    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    CGFloat cellHeight;
-    if (indexPath.section == 0) {
-        cellHeight = [HTSEditAvatarCell cellHeight];
-    }else if (indexPath.section == 2){
-        cellHeight = [HTSEditAvatarCell cellHeight];
-    }else{
-        cellHeight = [HTSEditIdCell cellHeight];
-    }
-    return cellHeight;
+    return [[_viewModel cellHeight:indexPath.section] floatValue];
 }
 
-
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    __weak typeof(self) weakSelf = self;
-    switch (indexPath.section) {
-        case 0:{
-            _actionController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *photographAction = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                //相机
-                [self photograph];
-            }];
-            UIAlertAction *albumAction = [UIAlertAction actionWithTitle:@"从相册中选取" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                //相册
-                [self selectFromAlbum];
-            }];
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-            [_actionController addAction:photographAction];
-            [_actionController addAction:albumAction];
-            [_actionController addAction:cancelAction];
-            [self presentViewController:_actionController animated:YES completion:nil];
-            
-            break; }
-            break;
-    }
-}
-
-
-- (UIColor *)colorWithHexString:(NSString *)stringToConvert
-{
-    NSString *noHashString = [stringToConvert stringByReplacingOccurrencesOfString:@"#" withString:@""]; // remove the #
-    NSScanner *scanner = [NSScanner scannerWithString:noHashString];
-    [scanner setCharactersToBeSkipped:[NSCharacterSet symbolCharacterSet]]; // remove + and $
-
-    unsigned hex;
-    if (![scanner scanHexInt:&hex]) return nil;
-    int r = (hex >> 16) & 0xFF;
-    int g = (hex >> 8) & 0xFF;
-    int b = (hex) & 0xFF;
-
-    return [UIColor colorWithRed:r / 255.0f green:g / 255.0f blue:b / 255.0f alpha:1.0f];
-}
 
 - (void)closeBtnTapped{
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)saveEdit{
-    NSArray *sandBoxPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsPath = [sandBoxPath objectAtIndex:0];
-    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"user.plist"];
-    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-    HTSEditNameCell *nameCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
-    HTSEditIdCell *editIdCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
-    HTSEditSelectInfoCell *genderCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
-    //HTSEditSelectInfoCell *birthdayCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:1]];
-    HTSEditIntroCell *introCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
-    HTSEditAvatarCell *avatarCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    UIImage *originImage = avatarCell.avatar.image;
+    HTSProfileEditTextCell *nameCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    HTSProfileEditTextCell *editIdCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+    HTSEditSelectInfoCell *genderCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+    HTSEditSelectInfoCell *birthdayCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:1]];
+    HTSEditIntroCell *introCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
+    UIImage *originImage = [_editAvatarView avatarImageView].image;
     NSData *data = UIImageJPEGRepresentation(originImage, 1.0f);
     NSString *encodedImageStr = [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
-    [dic setObject:nameCell.valueTextField.text forKey:@"name"];
-    [dic setObject:editIdCell.valueTextField.text forKey:@"user_id"];
-    [dic setObject:genderCell.genderLabel.text forKey:@"gender"];
-    //[dic setObject:birthdayCell. forKey:@"birthday"];
-    [dic setObject:encodedImageStr forKey:@"avatar"];
-    [dic setObject:introCell.introTextView.text forKey:@"intro"];
-    [dic writeToFile:plistPath atomically:YES];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.viewModel writeToLocalDataWithKey:@"昵称" value:nameCell.valueTextField.text];
+    [self.viewModel writeToLocalDataWithKey:@"火山号" value:editIdCell.valueTextField.text];
+    [self.viewModel writeToLocalDataWithKey:@"性别" value:genderCell.genderLabel.text];
+    [self.viewModel writeToLocalDataWithKey:@"生日" value:birthdayCell.genderLabel.text];
+    [self.viewModel writeToLocalDataWithKey:@"intro" value:introCell.introTextView.text];
+    [self.viewModel writeToLocalDataWithKey:@"avatar" value:encodedImageStr];
+    [self closeBtnTapped];
 }
 
 -(void)selectFromAlbum{
@@ -295,69 +263,23 @@
 }
 
 -(void)didChooseImage:(UIImage *)image{
-    HTSEditAvatarCell *avatarCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    [avatarCell.avatar setImage:image];
+    [_editAvatarView setAvatarImage:image];
     UIImageWriteToSavedPhotosAlbum(image, self, nil, NULL);
 }
 
-
-- (UIPickerView *) pickerGenderView
-{
-    if (!_genderPicker) {
-        _genderPicker = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 44, self.view.window.bounds.size.width, 156)];
-        CALayer *viewLayer = _genderPicker.layer;
-        [viewLayer setFrame:CGRectMake(0, 44, self.view.window.bounds.size.width, 156)];
-        //self.selectGender = _genderType;
-        _genderPicker.delegate = self;
-        _genderPicker.dataSource = self;
-    }
-    
-    return _genderPicker;
-}
-
-- (UIView *) genderView
-{
-    if (!_genderView) {
-        CGFloat startY = self.view.window.bounds.size.height - 200;
-        CGRect frame = CGRectMake(0, startY, self.view.window.bounds.size.width, 200);
-        _genderView = [[UIView alloc] initWithFrame:frame];
-        UIColor *color = [UIColor colorWithRed:241.0/255.0 green:241.0/255.0 blue:241.0/255.0 alpha:1.0];
-        _genderView.backgroundColor = color;
-        [_genderView addSubview:self.pickerGenderView];
-        [_genderView addSubview:self.genderToolBar];
-        [self.view addSubview:_genderView];
-    }
-    
-    return _genderView;
-}
-
-- (UIToolbar *) genderToolBar
-{
-    if (nil == _genderToolBar) {
-        _genderToolBar = [[UIToolbar alloc] init];
-        UIColor *color = [UIColor colorWithRed:193.0/255.0 green:193.0/255.0 blue:193.0/255.0 alpha:1.0];
-        _genderToolBar.backgroundColor = color;
-        _genderToolBar.frame = CGRectMake(0, 0, self.view.bounds.size.width, 44);
-        
-        UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelChangeGender)];
-        UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
-        UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(changeGenderTool)];
-        _genderToolBar.items = @[cancel, flexSpace, done];
-    }
-    
-    return _genderToolBar;
-}
-
--(void) cancelChangeGender{
-    [self.maskView removeFromSuperview];
-    [self.genderView removeFromSuperview];
-    [self.genderPicker removeFromSuperview];
-}
+//HTSDatePickerViewDelegate
+//- (void)cancelChangeBirthday{
+//    [self.datePickerView removeFromSuperview];
+//}
+//
+//- (void)changeBirthday{
+//    [self.viewModel writeToLocalDataWithKey: value:(nonnull NSString *)];
+//}
 
 
-//HTSEditIdCellDelegate
+//HTSProfileEditTextCellDelegate
 
--(void) editIdCell: (HTSEditIdCell *)cell copyUserId:(NSString *)userId{
+- (void)editCell: (HTSProfileEditTextCell *)cell copyUserId:(NSString *)userId{
     [[UIPasteboard generalPasteboard] setString: userId ?: @""];
     NSString *message = @"火山号已复制到剪贴板";
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message  preferredStyle:UIAlertControllerStyleActionSheet];
@@ -370,102 +292,43 @@
 
 
 //HTSSelectInfoCellDelegate
--(void) selectInfoCell:(HTSEditSelectInfoCell *)cell changeGender:(NSString *)gender{
-        self.maskView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame)-200);
-        self.maskView.alpha = 0.5;
-        
-        [UIView animateWithDuration:0.5 delay:0.1 options:UIViewAnimationOptionCurveEaseIn animations:^{
-            //[self __showGenderPick:YES];
-            //UIWindow *win = [[UIWindow alloc] init];
-            [self.view addSubview:self.maskView];
-            [self.view bringSubviewToFront:self.genderView];
-        } completion:
-         ^(BOOL finished) {
-            NSInteger row;
-            switch (self.genderType) {
-                case 0:
-                    row = 0;
-                    break;
-
-                case 1:
-                    row = 1;
-                    break;
-
-                case 2:
-                    row = 2;
-                    break;
-
-                default:
-                    row = 0;
-                    break;
-            }
-            [self.genderPicker selectRow:row inComponent:0 animated:YES];
-        }
-         ];
+- (void)selectInfoCell:(HTSEditSelectInfoCell *)cell changeGender:(NSString *)gender{
+    _currentCell = cell;
+    _actionController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *pickMaleAction = [UIAlertAction actionWithTitle:@"男" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.viewModel changeGender:@"男"];
+        cell.genderLabel.text = @"男";
+    }];
+    UIAlertAction *pickFemaleAction = [UIAlertAction actionWithTitle:@"女" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.viewModel changeGender:@"女"];
+        cell.genderLabel.text = @"女";
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    [_actionController addAction:pickMaleAction];
+    [_actionController addAction:pickFemaleAction];
+    [_actionController addAction:cancelAction];
+    [self presentViewController:_actionController animated:YES completion:nil];
 }
 
--(void) selectInfoCell:(HTSEditSelectInfoCell *)cell changeBirthday:(NSString *)birthday{
-    
+- (void)selectInfoCell:(HTSEditSelectInfoCell *)cell changeBirthday:(NSString *)birthday{
+    _currentCell = cell;
+    [self.view bringSubviewToFront:self.datePickerView];
 }
 
-
-
-
-
-//UIPickViewDelegate
-
-- (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    switch (row) {
-        case 0:
-            self.genderType = 0;
-            break;
-        case 1:
-            self.genderType = 1;
-            break;
-        case 2:
-            self.genderType = 2;
-            break;
-        default:
-            break;
-    }
-}
-
-- (NSString *) pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    NSString *title = nil;
-    if (0 == component) {
-        switch (row) {
-            case 0:
-                title = NSLocalizedString(@"男", nil);
-                break;
-            case 1:
-                title = NSLocalizedString(@"女", nil);
-                break;
-            case 2:
-                title = NSLocalizedString(@"秘密", nil);
-                break;
-            default:
-                break;
-        }
-    }
-    return title;
-}
-
-- (CGFloat) pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
-{
-    return 44.0f;
-}
-
-//Pickview datasource
-- (NSInteger) numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
-
-- (NSInteger) pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return 2;
+//EditAvatarViewDelegate
+- (void)tapAvatarLabel:(UIImageView *)avatarImageView{
+    _actionController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *photographAction = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self photograph];
+    }];
+    UIAlertAction *albumAction = [UIAlertAction actionWithTitle:@"从相册中选取" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self selectFromAlbum];
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    [_actionController addAction:photographAction];
+    [_actionController addAction:albumAction];
+    [_actionController addAction:cancelAction];
+    [self presentViewController:_actionController animated:YES completion:nil];
 }
 
 

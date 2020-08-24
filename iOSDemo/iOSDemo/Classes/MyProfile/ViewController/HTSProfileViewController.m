@@ -14,12 +14,13 @@
 #import "UIImageView+WebCache.h"
 #import "HTSEditViewController.h"
 
-#define CELL_IDENTIFIER @"HTSVideoCollectionViewCell"
-#define HEADER_IDENTIFIER @"HTSProfileHeader"
 #define SAFE_AREA_TOP_HEIGHT ((SCREEN_HEIGHT >= 812.0) && [[UIDevice currentDevice].model isEqualToString:@"iPhone"] ? 88 : 64)
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 
+static int const numOfColumns = 3;
+static NSString *const cellIdentifier = @"HTSVideoCollectionViewCell";
+static NSString *const headerIdentifier = @"HTSProfileHeader";
 
 @interface HTSProfileViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HTSProfileHeaderDelegate>
 
@@ -34,12 +35,12 @@
 
 @implementation HTSProfileViewController
 
--(void) viewWillAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [_profileHeader reloadUserInfo];
 }
 
--(void) viewDidAppear:(BOOL)animated{
+- (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [[_collectionView collectionViewLayout] invalidateLayout];
     [self.collectionView reloadData];
@@ -58,42 +59,53 @@
 //    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"userInfo.plist"];
 //}
 
--(void)initCollectionView{
+- (void)initCollectionView{
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     _viewModel = [[HTSProfileViewModel alloc] init];
-    _itemWidth = (SCREEN_WIDTH - (CGFloat)(((NSInteger)(SCREEN_WIDTH)) % 3) ) / 3.0f - 1.0f;
+    _itemWidth = (SCREEN_WIDTH - (CGFloat)(((NSInteger)(SCREEN_WIDTH)) % numOfColumns) ) / 3.0f - 1.0f;
     _itemHeight = _itemWidth * 1.35f;
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.scrollDirection = UICollectionViewScrollDirectionVertical;
-    layout.headerReferenceSize = CGSizeMake(100, 40);
-    layout.minimumLineSpacing = 1;
-    layout.minimumInteritemSpacing = 0;
-    _collectionView = [[UICollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:layout];
-    _collectionView.delegate = self;
-    _collectionView.dataSource = self;
-    _collectionView.backgroundColor = [UIColor clearColor];
-    _collectionView.showsVerticalScrollIndicator = NO;
-    [_collectionView registerClass:[HTSVideoCollectionViewCell class] forCellWithReuseIdentifier:CELL_IDENTIFIER];
-    [_collectionView registerClass:[HTSProfileHeader class]
-           forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                  withReuseIdentifier:HEADER_IDENTIFIER];
-    [self rac_liftSelector:@selector(refreshTableView:) withSignals:_viewModel.dataSignal, nil];
-    [_viewModel.loadDataCommand execute:nil];
+//    [self rac_liftSelector:@selector(refreshTableView:) withSignals:_viewModel.dataSignal, nil];
+//    [_viewModel.loadDataCommand execute:nil];
+    
+    [self refreshTableView:[_viewModel loadVideoData]];
     [self.view addSubview:_collectionView];
     
+}
+
+- (UICollectionView *)collectionView{
+    if(!_collectionView){
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        layout.scrollDirection = UICollectionViewScrollDirectionVertical;
+        layout.headerReferenceSize = CGSizeMake(100, 40);
+        layout.minimumLineSpacing = 1;
+        layout.minimumInteritemSpacing = 0;
+        _collectionView = [[UICollectionView alloc] initWithFrame:[UIScreen mainScreen].bounds collectionViewLayout:layout];
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        _collectionView.backgroundColor = [UIColor clearColor];
+        _collectionView.showsVerticalScrollIndicator = NO;
+        [_collectionView registerClass:[HTSVideoCollectionViewCell class] forCellWithReuseIdentifier:cellIdentifier];
+        [_collectionView registerClass:[HTSProfileHeader class]
+               forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                      withReuseIdentifier:headerIdentifier];
+    }
+    return _collectionView;
 }
 
 - (void)refreshTableView:(NSArray *)cellViewModelArray
 {
     self.cellViewModelArray = cellViewModelArray;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __weak HTSProfileViewController *weakSelf = self;
-        [weakSelf.collectionView reloadData];
-    });
-    
+    [self.collectionView reloadData];
     [self.collectionView.refreshControl endRefreshing];
 }
+
+//- (void)refreshTableView:(NSArray *)cellViewModelArray
+//{
+//    self.cellViewModelArray = cellViewModelArray;
+//    [self.collectionView reloadData];
+//    [self.collectionView.refreshControl endRefreshing];
+//}
 
 
 #pragma mark - UICollectionViewDataSource
@@ -110,15 +122,16 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     HTSVideoCollectionViewCell *cell =
-    (HTSVideoCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:CELL_IDENTIFIER
+    (HTSVideoCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier
                                                                               forIndexPath:indexPath];
-    HTSVideoCellViewModel *cellViewModel = self.cellViewModelArray[indexPath.row];
-    [cell bindWithViewModel:cellViewModel];
-    [cell.coverImageView sd_setImageWithURL:[NSURL URLWithString:cell.imageURL] placeholderImage:[UIImage imageNamed:@"cover"] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-            if (image) {
-                [cell.coverImageView setImage:image];
-            }
-    }];
+    HTSVideoModel *video = self.cellViewModelArray[indexPath.row];
+//    [cell bindWithViewModel:cellViewModel];
+//    [cell.coverImageView sd_setImageWithURL:[NSURL URLWithString:cell.imageURL] placeholderImage:[UIImage imageNamed:@"cover"] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+//            if (image) {
+//                [cell.coverImageView setImage:image];
+//            }
+//    }];
+    [cell updateWithImageURL:video.coverAddr likeCount:video.likeCount];
     
     return cell;
 }
@@ -132,7 +145,7 @@
 
   if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
       reusableView = [collectionView dequeueReusableSupplementaryViewOfKind:kind
-                                                      withReuseIdentifier:HEADER_IDENTIFIER
+                                                      withReuseIdentifier:headerIdentifier
                                                              forIndexPath:indexPath];
       _profileHeader = reusableView;
       reusableView.delegate = self;
@@ -140,14 +153,14 @@
   return reusableView;
 }
 
--(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
     if(section == 0) {
         return CGSizeMake(SCREEN_WIDTH, 200 + SAFE_AREA_TOP_HEIGHT);
     }
     return CGSizeZero;
 }
 
--(void)onUserActionTap:(NSInteger)tag {
+- (void)onUserActionTap:(NSInteger)tag {
     switch (tag) {
         case HTSProfileHeaderEditTag:{
             HTSEditViewController* editViewController = [[HTSEditViewController alloc] init];

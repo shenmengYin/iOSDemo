@@ -13,9 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol HTSEditSelectInfoCellDelegate <NSObject>
 
--(BOOL) profileCellShouldBeginEditing:(HTSEditSelectInfoCell *)cell;
--(void) selectInfoCell:(HTSEditSelectInfoCell *)cell changeGender:(NSString *)gender;
--(void) selectInfoCell:(HTSEditSelectInfoCell *)cell changeBirthday:(NSString *)birthday;
+- (BOOL)profileCellShouldBeginEditing:(HTSEditSelectInfoCell *)cell;
+- (void)selectInfoCell:(HTSEditSelectInfoCell *)cell changeGender:(NSString *)gender;
+- (void)selectInfoCell:(HTSEditSelectInfoCell *)cell changeBirthday:(NSString *)birthday;
 
 @end
 

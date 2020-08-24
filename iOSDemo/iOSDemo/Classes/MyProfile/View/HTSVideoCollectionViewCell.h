@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)bindWithViewModel:(HTSVideoCellViewModel *)viewModel;
 
+- (void)updateWithImageURL:(NSString*) imageURL likeCount:(NSInteger) likeCount;
+
 @end
 
 NS_ASSUME_NONNULL_END
