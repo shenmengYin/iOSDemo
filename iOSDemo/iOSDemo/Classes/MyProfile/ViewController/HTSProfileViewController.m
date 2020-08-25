@@ -24,9 +24,9 @@ static NSString *const headerIdentifier = @"HTSProfileHeader";
 
 @interface HTSProfileViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,HTSProfileHeaderDelegate>
 
-@property (nonatomic) HTSProfileViewModel *viewModel;
-@property (nonatomic) HTSProfileHeader *profileHeader;
-@property (nonatomic) NSArray *cellViewModelArray;
+@property (nonatomic, strong) HTSProfileViewModel *viewModel;
+@property (nonatomic, strong) HTSProfileHeader *profileHeader;
+@property (nonatomic, strong) NSArray *cellViewModelArray;
 @property (nonatomic, strong) NSMutableArray *videos;
 @property (nonatomic, assign) CGFloat itemWidth;
 @property (nonatomic, assign) CGFloat itemHeight;

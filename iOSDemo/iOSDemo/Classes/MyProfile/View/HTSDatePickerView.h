@@ -14,14 +14,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol HTSDatePickerViewDelegate <NSObject>
 
-- (void)cancelChangeBirthday;
-- (void)changeBirthday;
+- (void)datePickerCancel;
+- (void)datePickerDone;
 
 @end
 
 @interface HTSDatePickerView : UIView
 
 @property (nonatomic, weak) id<HTSDatePickerViewDelegate> delegate;
+
+- (NSString *)dateInString;
 
 @end
 

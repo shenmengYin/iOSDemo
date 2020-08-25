@@ -21,7 +21,7 @@
 - (NSString *)readFromLocalData:(NSString *)key{
     NSArray *sandBoxPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsPath = [sandBoxPath objectAtIndex:0];
-    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"userInfo.plist"];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"/userInfo.plist"];
     NSMutableDictionary *dataDic = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
     return dataDic[key] ?: @"";
 }
@@ -30,7 +30,7 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSArray *sandBoxPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsPath = [sandBoxPath objectAtIndex:0];
-    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"userInfo.plist"];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"/userInfo.plist"];
     NSMutableDictionary *dataDic;
     if (![fileManager fileExistsAtPath: plistPath]){
         [fileManager createFileAtPath:plistPath contents:nil attributes:nil];

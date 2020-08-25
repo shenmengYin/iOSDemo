@@ -33,6 +33,7 @@
 @property (nonatomic, strong) HTSSelectImageManager *imageManager;
 @property (nonatomic, strong) HTSDatePickerView *datePickerView;
 
+
 @end
 
 @implementation HTSEditViewController
@@ -41,6 +42,8 @@
     [super viewDidLoad];
     self.title = @"编辑资料";
     self.viewModel = [[HTSEditViewModel alloc] init];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyboardHide)];
+    [self.view addGestureRecognizer:tapGestureRecognizer];
     //[self.viewModel writeToLocalDataWithKey:@"昵称" value:@"test"];
     [self configNavBar];
     [self setupUIComponents];
@@ -128,16 +131,53 @@
 - (HTSDatePickerView *)datePickerView
 {
     if (!_datePickerView) {
-        CGFloat startY = self.view.bounds.size.height - 260;
-        CGRect frame = CGRectMake(0, startY, self.view.bounds.size.width, 260);
-        _datePickerView = [[HTSDatePickerView alloc] initWithFrame:frame];
-        UIColor *color = [UIColor colorWithRed:241.0/255.0 green:241.0/255.0 blue:241.0/255.0 alpha:1.0];
+        _datePickerView = [[HTSDatePickerView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 260, self.view.bounds.size.width, 260)];
+        UIColor *color = [UIColor whiteColor];
         _datePickerView.backgroundColor = color;
+        _datePickerView.delegate = self;
     }
     return _datePickerView;
 }
 
+- (void)keyboardHide
+{
+    [self.view endEditing:YES];
+}
 
+- (void)closeBtnTapped{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)setValueForCurrentCell: (NSString *)value{
+    if(_currentCell){
+        _currentCell.birthdayLabel.text = value;
+    }
+}
+
+- (void)saveEdit{
+    NSInteger section = 0;
+    for(int row = 0; row < [self.myTableView numberOfRowsInSection:section]; row++){
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+        if([[self.myTableView cellForRowAtIndexPath:indexPath] class] == HTSEditSelectInfoCell.class){
+            HTSEditSelectInfoCell *cell = [self.myTableView cellForRowAtIndexPath:indexPath];
+            [self.viewModel writeToLocalDataWithKey:cell.titleLabel.text value:[cell.titleLabel.text isEqualToString:@"性别"] ? cell.genderLabel.text : cell.birthdayLabel.text];
+        }
+        else if([[self.myTableView cellForRowAtIndexPath:indexPath] class] == HTSProfileEditTextCell.class){
+            HTSProfileEditTextCell *cell = [self.myTableView cellForRowAtIndexPath:indexPath];
+            [self.viewModel writeToLocalDataWithKey:cell.titleLabel.text value:cell.valueTextField.text];
+        }
+    }
+    HTSEditIntroCell *introCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
+    UIImage *originImage = [_editAvatarView avatarImageView].image;
+    NSData *data = UIImageJPEGRepresentation(originImage, 1.0f);
+    NSString *encodedImageStr = [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
+    [self.viewModel writeToLocalDataWithKey:@"intro" value:introCell.introTextView.text];
+    [self.viewModel writeToLocalDataWithKey:@"avatar" value:encodedImageStr];
+    [self closeBtnTapped];
+}
+
+
+#pragma mark TableViewDataSource
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 0.01;
 }
@@ -208,7 +248,7 @@
 //            }
 //        }
     }
-    else{//} if(indexPath.section == 1){
+    else{
         HTSEditIntroCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HTSEditIntroCell" forIndexPath:indexPath];
         [cell setViewText:[self.viewModel readFromLocalData:@"intro"]];
         NSLog(@"section: %ld, row:%ld", indexPath.section, indexPath.row);
@@ -222,35 +262,13 @@
 }
 
 
-- (void)closeBtnTapped{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)saveEdit{
-    HTSProfileEditTextCell *nameCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    HTSProfileEditTextCell *editIdCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
-    HTSEditSelectInfoCell *genderCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
-    HTSEditSelectInfoCell *birthdayCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:1]];
-    HTSEditIntroCell *introCell = [self.myTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
-    UIImage *originImage = [_editAvatarView avatarImageView].image;
-    NSData *data = UIImageJPEGRepresentation(originImage, 1.0f);
-    NSString *encodedImageStr = [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
-    [self.viewModel writeToLocalDataWithKey:@"昵称" value:nameCell.valueTextField.text];
-    [self.viewModel writeToLocalDataWithKey:@"火山号" value:editIdCell.valueTextField.text];
-    [self.viewModel writeToLocalDataWithKey:@"性别" value:genderCell.genderLabel.text];
-    [self.viewModel writeToLocalDataWithKey:@"生日" value:birthdayCell.genderLabel.text];
-    [self.viewModel writeToLocalDataWithKey:@"intro" value:introCell.introTextView.text];
-    [self.viewModel writeToLocalDataWithKey:@"avatar" value:encodedImageStr];
-    [self closeBtnTapped];
-}
+#pragma mark SelectImageManager
 
 -(void)selectFromAlbum{
     if (!_imageManager) {
-        //初始化并设置代理
         _imageManager = [[HTSSelectImageManager alloc] initWithViewController:self];
         _imageManager.deleagte = self;
     }
-    //调用方法进行图片的选择
     [_imageManager selectImageWithAlbum];
 }
     
@@ -267,17 +285,8 @@
     UIImageWriteToSavedPhotosAlbum(image, self, nil, NULL);
 }
 
-//HTSDatePickerViewDelegate
-//- (void)cancelChangeBirthday{
-//    [self.datePickerView removeFromSuperview];
-//}
-//
-//- (void)changeBirthday{
-//    [self.viewModel writeToLocalDataWithKey: value:(nonnull NSString *)];
-//}
 
-
-//HTSProfileEditTextCellDelegate
+#pragma mark HTSProfileEditTextCellDelegate
 
 - (void)editCell: (HTSProfileEditTextCell *)cell copyUserId:(NSString *)userId{
     [[UIPasteboard generalPasteboard] setString: userId ?: @""];
@@ -291,10 +300,11 @@
 }
 
 
-//HTSSelectInfoCellDelegate
+#pragma mark HTSSelectInfoCellDelegate
+
 - (void)selectInfoCell:(HTSEditSelectInfoCell *)cell changeGender:(NSString *)gender{
-    _currentCell = cell;
-    _actionController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
+    self.currentCell = cell;
+    self.actionController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *pickMaleAction = [UIAlertAction actionWithTitle:@"男" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.viewModel changeGender:@"男"];
         cell.genderLabel.text = @"男";
@@ -311,11 +321,26 @@
 }
 
 - (void)selectInfoCell:(HTSEditSelectInfoCell *)cell changeBirthday:(NSString *)birthday{
-    _currentCell = cell;
-    [self.view bringSubviewToFront:self.datePickerView];
+    self.currentCell = cell;
+    [self.view addSubview:self.datePickerView];
+    //cell.birthdayLabel.text = [self.datePickerView dateInString];
 }
 
-//EditAvatarViewDelegate
+
+#pragma mark HTSDatePickerViewDelegate
+
+- (void)datePickerCancel{
+    [self.datePickerView removeFromSuperview];
+}
+
+- (void)datePickerDone{
+    [self setValueForCurrentCell: [self.datePickerView dateInString]];
+    [self.datePickerView removeFromSuperview];
+}
+
+
+#pragma mark HTSEditAvatarViewDelegate
+
 - (void)tapAvatarLabel:(UIImageView *)avatarImageView{
     _actionController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *photographAction = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -330,6 +355,8 @@
     [_actionController addAction:cancelAction];
     [self presentViewController:_actionController animated:YES completion:nil];
 }
+
+
 
 
 @end

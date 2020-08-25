@@ -59,7 +59,8 @@ UIViewController *presentController;
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
     imagePickerController.delegate = self;
     imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
-    [imagePickerController dismissViewControllerAnimated:YES completion:nil];
+    [presentController presentViewController:imagePickerController animated:YES completion:nil];
+    //[imagePickerController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

@@ -35,8 +35,9 @@
         _avatar.clipsToBounds = YES;
         [_container addSubview:_avatar];
         [_avatar mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(weakSelf);
-            make.centerX.equalTo(weakSelf);
+            __strong typeof(weakSelf) self = weakSelf;
+            make.top.equalTo(self);
+            make.centerX.equalTo(self);
             make.width.height.mas_equalTo(avatarRadius*2);
         }];
 
@@ -47,8 +48,9 @@
             _titleLabel.textColor = [UIColor redColor];
             [self.contentView addSubview:_titleLabel];
             [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                __strong typeof(weakSelf) self = weakSelf;
                 make.top.equalTo(self.avatar.mas_bottom).offset(10);
-                make.centerX.equalTo(weakSelf);
+                make.centerX.equalTo(self);
             }];
         }
     }

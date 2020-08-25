@@ -7,6 +7,7 @@
 //
 
 #import "HTSEditSelectInfoCell.h"
+#import "HTSDatePickerView.h"
 
 @interface HTSEditSelectInfoCell ()
 
@@ -120,5 +121,6 @@
         [delegate selectInfoCell:self changeBirthday:self.birthdayLabel.text];
     }
 }
+
 
 @end
